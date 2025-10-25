@@ -251,15 +251,11 @@ class EnrollmentSimulation {
     /**
      * Simulate biometric template extraction
      */
-    simulateBiometricExtraction(credentialData) {
-        // Create a simulated biometric template
-        return JSON.stringify({
-            id: credentialData.credentialId,
-            type: credentialData.type,
-            timestamp: credentialData.timestamp,
-            features: Array(64).fill(0).map(() => Math.floor(Math.random() * 256))
-        });
-    }
+    simulateBiometricExtraction(assertionData) {
+    // ALWAYS return the same string for demo
+    return "demo-static-biometric-template";
+}
+
 
     /**
      * Reset enrollment state

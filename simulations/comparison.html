@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Comparison - Crypto Biometric Authentication</title>
+    <link rel="stylesheet" href="../assets/css/design-system.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <style>
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .comparison-section {
+            background: var(--color-bg-surface);
+            padding: 2rem;
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            margin-top: 2rem;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table th {
+            color: var(--color-primary);
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        .comparison-table td {
+            color: var(--color-text-muted);
+        }
+
+        .check-mark {
+            color: var(--color-success);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .cross-mark {
+            color: var(--color-error);
+            font-size: 1.2rem;
+        }
+
+        .method-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .method-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .method-title.biometric {
+            color: var(--color-primary);
+        }
+
+        .method-title.password {
+            color: var(--color-error);
+        }
+
+        .method-title.twofa {
+            color: var(--color-secondary);
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .pros, .cons {
+            padding: 1rem;
+            border-radius: var(--radius-md);
+        }
+
+        .pros {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--color-success);
+        }
+
+        .cons {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--color-error);
+        }
+
+        .pros h4, .cons h4 {
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .pros h4 {
+            color: var(--color-success);
+        }
+
+        .cons h4 {
+            color: var(--color-error);
+        }
+
+        .pros ul, .cons ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .pros li, .cons li {
+            padding: 0.25rem 0;
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        .pros li::before {
+            content: "✓ ";
+            color: var(--color-success);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .cons li::before {
+            content: "✗ ";
+            color: var(--color-error);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .security-score {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .security-score.high {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--color-success);
+            border: 1px solid var(--color-success);
+        }
+
+        .security-score.medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+        }
+
+        .security-score.low {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--color-error);
+            border: 1px solid var(--color-error);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <a href="../pages/simulation.html" class="back-link">← Back to Simulations</a>
+
+        <h1 style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            ⚖️ Authentication Methods Comparison
+        </h1>
+        <p style="font-size: 1.1rem; color: var(--color-text-muted); margin-bottom: 2rem;">
+            Compare biometric cryptography with traditional authentication methods
+        </p>
+
+        <div class="comparison-section">
+            <h2 style="color: var(--color-primary); margin-bottom: 1rem;">Quick Comparison Table</h2>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Passwords</th>
+                        <th>2FA (SMS)</th>
+                        <th>Biometric Hash</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Security Level</strong></td>
+                        <td><span class="security-score low">Low</span></td>
+                        <td><span class="security-score medium">Medium</span></td>
+                        <td><span class="security-score high">High</span></td>
+                    </tr>
+                    <tr>
+                        <td>Phishing Resistant</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Cannot be Stolen</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>No User Memory Required</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Database Breach Safe</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Unique Per User</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Fast Authentication</td>
+                        <td class="check-mark">✓</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>No Additional Device Needed</td>
+                        <td class="check-mark">✓</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Cryptographically Secure</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>No Password Reset Needed</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Works Offline</td>
+                        <td class="check-mark">✓</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="comparison-section">
+            <h2 style="color: var(--color-primary); margin-bottom: 1.5rem;">Detailed Comparison</h2>
+
+            <div class="method-card">
+                <div class="method-title biometric">🔐 Biometric Cryptography (Our Method)</div>
+                <p style="color: var(--color-text-muted); margin-bottom: 1rem;">
+                    Uses unique biological characteristics combined with SHA-256 hashing and salt for maximum security.
+                </p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✓ Advantages</h4>
+                        <ul>
+                            <li>Cannot be forgotten or lost</li>
+                            <li>Unique to each individual</li>
+                            <li>Resistant to phishing attacks</li>
+                            <li>Database breaches don't expose biometrics</li>
+                            <li>Fast and convenient</li>
+                            <li>No password fatigue</li>
+                            <li>Mathematically irreversible</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>✗ Considerations</h4>
+                        <ul>
+                            <li>Requires compatible hardware</li>
+                            <li>Privacy concerns if not properly implemented</li>
+                            <li>Cannot be changed if compromised (design addresses this)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="method-card">
+                <div class="method-title password">🔑 Traditional Passwords</div>
+                <p style="color: var(--color-text-muted); margin-bottom: 1rem;">
+                    User-created text strings stored in databases (usually hashed).
+                </p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✓ Advantages</h4>
+                        <ul>
+                            <li>Universal compatibility</li>
+                            <li>Easy to implement</li>
+                            <li>Can be changed anytime</li>
+                            <li>No special hardware required</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>✗ Disadvantages</h4>
+                        <ul>
+                            <li>Easily forgotten</li>
+                            <li>Can be stolen or guessed</li>
+                            <li>Vulnerable to phishing</li>
+                            <li>Often reused across sites</li>
+                            <li>Weak passwords common</li>
+                            <li>Database breaches expose credentials</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="method-card">
+                <div class="method-title twofa">📱 Two-Factor Authentication (SMS/App)</div>
+                <p style="color: var(--color-text-muted); margin-bottom: 1rem;">
+                    Combines password with a second factor (SMS code, authenticator app).
+                </p>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✓ Advantages</h4>
+                        <ul>
+                            <li>Better than passwords alone</li>
+                            <li>Protects against password theft</li>
+                            <li>Widely supported</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>✗ Disadvantages</h4>
+                        <ul>
+                            <li>SMS can be intercepted</li>
+                            <li>Requires phone/device</li>
+                            <li>Slower authentication</li>
+                            <li>Network dependency (SMS)</li>
+                            <li>Can be phished with real-time attacks</li>
+                            <li>Still relies on passwords</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="comparison-section">
+            <h2 style="color: var(--color-primary); margin-bottom: 1rem;">Why Biometric Cryptography Wins</h2>
+            <div style="background: rgba(0, 255, 136, 0.1); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--color-primary);">
+                <p style="color: var(--color-text-muted); line-height: 1.8; margin-bottom: 1rem;">
+                    Biometric cryptography combines the <strong style="color: var(--color-primary);">best of all worlds</strong>:
+                </p>
+                <ul style="color: var(--color-text-muted); line-height: 2; margin-left: 2rem;">
+                    <li>✓ <strong>Convenience</strong> of biometrics (no passwords to remember)</li>
+                    <li>✓ <strong>Security</strong> of cryptographic hashing (irreversible, collision-resistant)</li>
+                    <li>✓ <strong>Privacy</strong> through one-way functions (original biometric never stored)</li>
+                    <li>✓ <strong>Uniqueness</strong> of biological traits (cannot be shared or duplicated)</li>
+                    <li>✓ <strong>Speed</strong> of hash comparison (milliseconds)</li>
+                    <li>✓ <strong>Protection</strong> against rainbow tables (unique salt per user)</li>
+                </ul>
+                <p style="color: var(--color-text-muted); line-height: 1.8; margin-top: 1.5rem;">
+                    This makes it the <strong style="color: var(--color-primary);">most secure and user-friendly</strong> authentication method available for modern applications.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

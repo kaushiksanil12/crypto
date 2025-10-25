@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salt Demo - Crypto Biometric Authentication</title>
+    <link rel="stylesheet" href="../assets/css/design-system.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <style>
+        .page-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .demo-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .demo-section {
+            background: var(--color-bg-surface);
+            padding: 2rem;
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .hash-comparison-box {
+            background: var(--color-bg-dark);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hash-comparison-box.highlight {
+            border-color: var(--color-primary);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .hash-label {
+            color: var(--color-primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hash-value {
+            color: var(--color-text-light);
+            font-family: var(--font-family-mono);
+            font-size: 0.85rem;
+            word-break: break-all;
+            line-height: 1.8;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            color: var(--color-text-light);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--color-text-light);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: var(--font-family-mono);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .info-banner {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-primary);
+            margin-bottom: 2rem;
+        }
+
+        .info-banner-title {
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .info-banner-text {
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        .comparison-result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+            display: none;
+        }
+
+        .comparison-result.active {
+            display: block;
+        }
+
+        .comparison-result.different {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid var(--color-success);
+        }
+
+        .result-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--color-success);
+        }
+
+        .result-message {
+            color: var(--color-text-muted);
+            font-size: 1rem;
+        }
+
+        .stats-display {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-display {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <a href="../pages/simulation.html" class="back-link">← Back to Simulations</a>
+
+        <h1 style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            🧂 Salt Demo
+        </h1>
+        <p style="font-size: 1.1rem; color: var(--color-text-muted); margin-bottom: 2rem;">
+            See how salt prevents rainbow table attacks by making identical inputs produce different hashes
+        </p>
+
+        <div class="info-banner">
+            <div class="info-banner-title">💡 What This Demo Shows</div>
+            <div class="info-banner-text">
+                Even with the same input text, different salts produce completely different hash outputs. This prevents attackers from using pre-computed hash tables (rainbow tables) to crack passwords or biometric hashes.
+            </div>
+        </div>
+
+        <div class="demo-layout">
+            <div class="demo-section">
+                <h3 style="color: var(--color-primary); margin-bottom: 1.5rem;">Input Configuration</h3>
+
+                <div class="input-group">
+                    <label class="input-label">Input Text (Same for both)</label>
+                    <input type="text" id="inputText" class="input-field" value="password123" placeholder="Enter text to hash">
+                </div>
+
+                <div class="demo-grid">
+                    <div>
+                        <div class="input-group">
+                            <label class="input-label">Salt 1</label>
+                            <input type="text" id="salt1" class="input-field" placeholder="Salt will be generated">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="input-group">
+                            <label class="input-label">Salt 2</label>
+                            <input type="text" id="salt2" class="input-field" placeholder="Salt will be generated">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn--primary" id="generateSalts">
+                        Generate Different Salts
+                    </button>
+                    <button class="btn btn--primary" id="computeHashes" style="background: linear-gradient(135deg, var(--color-secondary), var(--color-purple));">
+                        Compute Hashes
+                    </button>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3 style="color: var(--color-primary); margin-bottom: 1.5rem;">Hash Results</h3>
+
+                <div class="demo-grid">
+                    <div class="hash-comparison-box" id="hash1Box">
+                        <div class="hash-label">Hash 1 (Input + Salt 1)</div>
+                        <div class="hash-value" id="hash1Value">Not computed yet</div>
+                    </div>
+
+                    <div class="hash-comparison-box" id="hash2Box">
+                        <div class="hash-label">Hash 2 (Input + Salt 2)</div>
+                        <div class="hash-value" id="hash2Value">Not computed yet</div>
+                    </div>
+                </div>
+
+                <div class="stats-display" id="statsDisplay" style="display: none;">
+                    <div class="stat-box">
+                        <div class="stat-value" id="matchingChars">0</div>
+                        <div class="stat-label">Matching Characters</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="differentChars">64</div>
+                        <div class="stat-label">Different Characters</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="similarityPercent">0%</div>
+                        <div class="stat-label">Similarity</div>
+                    </div>
+                </div>
+
+                <div class="comparison-result" id="comparisonResult">
+                    <div class="result-icon">✓</div>
+                    <div class="result-title">Hashes Are Different!</div>
+                    <div class="result-message">
+                        Same input with different salts produces completely different hashes. This is why salt is crucial for security.
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3 style="color: var(--color-primary); margin-bottom: 1.5rem;">Why This Matters</h3>
+
+                <div class="demo-grid">
+                    <div style="background: rgba(239, 68, 68, 0.1); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--color-error);">
+                        <h4 style="color: var(--color-error); margin-bottom: 0.75rem;">❌ Without Salt</h4>
+                        <p style="color: var(--color-text-muted); font-size: 0.9rem; line-height: 1.6;">
+                            Identical passwords produce identical hashes. Attackers can use pre-computed rainbow tables to instantly crack common passwords.
+                        </p>
+                        <div style="margin-top: 1rem; font-family: var(--font-family-mono); font-size: 0.8rem; color: var(--color-text-muted);">
+                            hash("password123") = abc123...<br>
+                            hash("password123") = abc123... <span style="color: var(--color-error);">← Same!</span>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(16, 185, 129, 0.1); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--color-success);">
+                        <h4 style="color: var(--color-success); margin-bottom: 0.75rem;">✓ With Salt</h4>
+                        <p style="color: var(--color-text-muted); font-size: 0.9rem; line-height: 1.6;">
+                            Each password gets a unique salt, producing different hashes. Rainbow tables become useless as attackers would need to compute hashes for every possible salt.
+                        </p>
+                        <div style="margin-top: 1rem; font-family: var(--font-family-mono); font-size: 0.8rem; color: var(--color-text-muted);">
+                            hash("password123" + salt1) = xyz789...<br>
+                            hash("password123" + salt2) = def456... <span style="color: var(--color-success);">← Different!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="../assets/js/core/utils.js"></script>
+    <script src="../assets/js/crypto/hash-generator.js"></script>
+    <script src="../assets/js/crypto/salt-generator.js"></script>
+    <script src="../assets/js/ui/notification.js"></script>
+    <script>
+        const hashGenerator = new HashGenerator();
+        const saltGenerator = new SaltGenerator();
+
+        let currentSalt1 = '';
+        let currentSalt2 = '';
+        let currentHash1 = '';
+        let currentHash2 = '';
+
+        // Generate salts
+        document.getElementById('generateSalts').addEventListener('click', () => {
+            currentSalt1 = saltGenerator.generate(32);
+            currentSalt2 = saltGenerator.generate(32);
+
+            document.getElementById('salt1').value = currentSalt1;
+            document.getElementById('salt2').value = currentSalt2;
+
+            notifications.success('Two different salts generated!');
+        });
+
+        // Compute hashes
+        document.getElementById('computeHashes').addEventListener('click', async () => {
+            const inputText = document.getElementById('inputText').value;
+            const salt1 = document.getElementById('salt1').value;
+            const salt2 = document.getElementById('salt2').value;
+
+            if (!inputText) {
+                notifications.warning('Please enter input text');
+                return;
+            }
+
+            if (!salt1 || !salt2) {
+                notifications.warning('Please generate salts first');
+                return;
+            }
+
+            try {
+                // Compute both hashes
+                currentHash1 = await hashGenerator.hashWithSalt(inputText, salt1);
+                currentHash2 = await hashGenerator.hashWithSalt(inputText, salt2);
+
+                // Display hashes
+                document.getElementById('hash1Value').textContent = currentHash1;
+                document.getElementById('hash2Value').textContent = currentHash2;
+
+                // Highlight boxes
+                document.getElementById('hash1Box').classList.add('highlight');
+                document.getElementById('hash2Box').classList.add('highlight');
+
+                // Calculate similarity
+                let matchingChars = 0;
+                for (let i = 0; i < currentHash1.length; i++) {
+                    if (currentHash1[i] === currentHash2[i]) {
+                        matchingChars++;
+                    }
+                }
+
+                const differentChars = currentHash1.length - matchingChars;
+                const similarity = (matchingChars / currentHash1.length * 100).toFixed(1);
+
+                // Update stats
+                document.getElementById('matchingChars').textContent = matchingChars;
+                document.getElementById('differentChars').textContent = differentChars;
+                document.getElementById('similarityPercent').textContent = similarity + '%';
+                document.getElementById('statsDisplay').style.display = 'grid';
+
+                // Show result
+                const resultDiv = document.getElementById('comparisonResult');
+                resultDiv.classList.add('active', 'different');
+
+                notifications.success('Hashes computed successfully!');
+            } catch (error) {
+                notifications.error('Failed to compute hashes');
+                console.error(error);
+            }
+        });
+
+        // Auto-generate salts on load
+        setTimeout(() => {
+            document.getElementById('generateSalts').click();
+        }, 500);
+    </script>
+</body>
+</html>

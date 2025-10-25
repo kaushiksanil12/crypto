@@ -256,12 +256,10 @@ class VerificationSimulation {
      * Simulate biometric extraction
      */
     simulateBiometricExtraction(assertionData) {
-        return JSON.stringify({
-            id: assertionData.credentialId,
-            timestamp: assertionData.timestamp,
-            features: Array(64).fill(0).map(() => Math.floor(Math.random() * 256))
-        });
-    }
+    // ALWAYS return the same string for demo
+    return "demo-static-biometric-template";
+}
+
 
     /**
      * Calculate hash similarity (for visualization)
