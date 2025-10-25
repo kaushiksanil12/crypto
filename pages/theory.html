@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theory - Crypto Biometric Authentication</title>
+    <link rel="stylesheet" href="../assets/css/design-system.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <style>
+        .page-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            min-height: 100vh;
+        }
+
+        .theory-section {
+            margin-bottom: 4rem;
+        }
+
+        .theory-section h2 {
+            font-size: 2rem;
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .theory-section h3 {
+            font-size: 1.5rem;
+            color: var(--color-secondary);
+            margin: 2rem 0 1rem;
+        }
+
+        .theory-section p {
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .concept-card {
+            background: var(--color-bg-surface);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border-left: 4px solid var(--color-primary);
+            margin: 2rem 0;
+        }
+
+        .concept-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background: var(--color-bg-dark);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        .code-block code {
+            font-family: var(--font-family-mono);
+            font-size: 0.9rem;
+            color: var(--color-primary);
+            line-height: 1.6;
+        }
+
+        .algorithm-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .algorithm-list li {
+            background: var(--color-bg-surface);
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--color-secondary);
+        }
+
+        .key-point {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-primary);
+            margin: 1.5rem 0;
+        }
+
+        .key-point strong {
+            color: var(--color-primary);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+
+        <h1 style="font-size: 3rem; margin-bottom: 2rem; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            📚 Theory
+        </h1>
+
+        <div class="theory-section">
+            <h2>Biometric Authentication</h2>
+            <p>
+                Biometric authentication is a security process that uses unique biological characteristics to verify a person's identity. Unlike passwords or PINs, biometric traits are inherently tied to an individual and cannot be easily stolen, forgotten, or shared.
+            </p>
+
+            <div class="concept-card">
+                <div class="concept-title">Types of Biometric Authentication</div>
+                <ul class="algorithm-list">
+                    <li><strong>Fingerprint Recognition:</strong> Analyzes unique ridge patterns on fingertips</li>
+                    <li><strong>Facial Recognition:</strong> Identifies facial features and geometry</li>
+                    <li><strong>Iris Scanning:</strong> Examines unique patterns in the colored ring of the eye</li>
+                    <li><strong>Voice Recognition:</strong> Analyzes vocal characteristics and speech patterns</li>
+                </ul>
+            </div>
+
+            <div class="key-point">
+                <strong>Key Advantage:</strong> Biometric traits are unique to each individual, making them significantly more secure than traditional password-based authentication.
+            </div>
+        </div>
+
+        <div class="theory-section">
+            <h2>Cryptographic Hash Functions</h2>
+            <p>
+                A cryptographic hash function is a mathematical algorithm that transforms input data of any size into a fixed-size output (hash value). These functions are designed to be one-way, meaning it's computationally infeasible to reverse the process.
+            </p>
+
+            <h3>Properties of Hash Functions</h3>
+            <ul class="algorithm-list">
+                <li><strong>Deterministic:</strong> Same input always produces the same hash</li>
+                <li><strong>One-Way:</strong> Cannot reverse hash to get original data</li>
+                <li><strong>Collision Resistant:</strong> Extremely difficult to find two inputs with same hash</li>
+                <li><strong>Avalanche Effect:</strong> Small input change drastically changes output</li>
+                <li><strong>Fixed Output Size:</strong> Regardless of input size, hash is always fixed length</li>
+            </ul>
+
+            <h3>SHA-256 Algorithm</h3>
+            <p>
+                SHA-256 (Secure Hash Algorithm 256-bit) is part of the SHA-2 family and produces a 256-bit (64 hexadecimal character) hash value. It's widely used in blockchain, SSL certificates, and secure authentication.
+            </p>
+
+            <div class="code-block">
+                <code>
+Input: "Hello World"<br>
+SHA-256: a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e<br><br>
+Input: "Hello World!" (one character added)<br>
+SHA-256: 7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
+                </code>
+            </div>
+
+            <div class="key-point">
+                <strong>Avalanche Effect:</strong> Notice how adding just one character ("!") completely changes the entire hash output.
+            </div>
+        </div>
+
+        <div class="theory-section">
+            <h2>Salt in Cryptography</h2>
+            <p>
+                A salt is random data that is added to the input before hashing. This ensures that even identical inputs produce different hash values when different salts are used, providing protection against rainbow table attacks and hash collisions.
+            </p>
+
+            <div class="concept-card">
+                <div class="concept-title">Why Use Salt?</div>
+                <p style="margin-bottom: 1rem;">Without salt, attackers can use pre-computed hash tables (rainbow tables) to quickly reverse hashes. Salt makes each hash unique, even for identical inputs.</p>
+                
+                <div class="code-block">
+                    <code>
+Without Salt:<br>
+Hash("password123") = always the same hash<br><br>
+With Salt:<br>
+Hash("password123" + "salt1") = unique hash 1<br>
+Hash("password123" + "salt2") = unique hash 2
+                    </code>
+                </div>
+            </div>
+
+            <h3>Salt Generation Best Practices</h3>
+            <ul class="algorithm-list">
+                <li>Use cryptographically secure random number generator</li>
+                <li>Minimum 16 bytes (128 bits), recommended 32 bytes (256 bits)</li>
+                <li>Generate unique salt for each user/enrollment</li>
+                <li>Store salt alongside hash (salt is not secret)</li>
+            </ul>
+        </div>
+
+        <div class="theory-section">
+            <h2>Biometric Hashing Process</h2>
+            <p>
+                Combining biometric authentication with cryptographic hashing creates a secure, privacy-preserving authentication system. The biometric data is never stored in its original form.
+            </p>
+
+            <div class="concept-card">
+                <div class="concept-title">Complete Process</div>
+                <ol style="line-height: 2; padding-left: 1.5rem;">
+                    <li><strong>Capture:</strong> Acquire biometric sample (fingerprint/face)</li>
+                    <li><strong>Extract:</strong> Extract unique features into a template</li>
+                    <li><strong>Salt:</strong> Generate cryptographically random salt</li>
+                    <li><strong>Combine:</strong> Concatenate template + salt</li>
+                    <li><strong>Hash:</strong> Apply SHA-256 to produce final hash</li>
+                    <li><strong>Store:</strong> Save hash and salt (not original biometric)</li>
+                </ol>
+            </div>
+
+            <div class="code-block">
+                <code>
+Biometric Template: [binary data representing fingerprint]<br>
+Generated Salt: "a3f8c2e9b1d4567890abcdef12345678"<br>
+Combined: Template + Salt<br>
+SHA-256 Hash: "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92"<br><br>
+✓ Original biometric data is NEVER stored<br>
+✓ Hash cannot be reversed to get original biometric<br>
+✓ Salt prevents rainbow table attacks
+                </code>
+            </div>
+        </div>
+
+        <div class="theory-section">
+            <h2>Security Advantages</h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">Privacy Protection</div>
+                <p>
+                    Since only the hash is stored, even if the database is compromised, attackers cannot reconstruct the original biometric data. This protects user privacy and prevents biometric theft.
+                </p>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">Irreversibility</div>
+                <p>
+                    SHA-256 is a one-way function. The hash cannot be reversed to obtain the original biometric template, providing mathematical certainty of security.
+                </p>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">Uniqueness</div>
+                <p>
+                    Each person's biometric hash is unique. Combined with individual salts, this ensures no two users have identical stored values.
+                </p>
+            </div>
+
+            <div class="key-point">
+                <strong>Important:</strong> This system provides "something you are" (biometric) combined with cryptographic security, creating a multi-layered defense against unauthorized access.
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: space-between; margin-top: 4rem;">
+            <a href="aim.html" class="btn btn--secondary">
+                ← Previous: Aim
+            </a>
+            <a href="procedure.html" class="btn btn--primary">
+                Next: Procedure →
+            </a>
+        </div>
+    </div>
+</body>
+</html>

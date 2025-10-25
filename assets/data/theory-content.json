@@ -1,0 +1,344 @@
+{
+  "version": "1.0.0",
+  "title": "Biometric Cryptography - Theory and Concepts",
+  "lastUpdated": "2025-10-25T18:53:00+05:30",
+  "sections": [
+    {
+      "id": "introduction",
+      "title": "Introduction to Biometric Authentication",
+      "content": "Biometric authentication uses unique physical or behavioral characteristics to verify identity. Unlike passwords or PINs, biometric traits are inherently tied to an individual and cannot be easily stolen or forgotten.",
+      "keyPoints": [
+        "Biometrics measure unique physical or behavioral characteristics",
+        "Common biometric modalities: fingerprint, face, iris, voice",
+        "Two phases: Enrollment (registration) and Verification (authentication)",
+        "More secure than traditional password-based systems"
+      ],
+      "examples": [
+        "Fingerprint scanners on smartphones",
+        "Face recognition for device unlock",
+        "Iris scanning at airports",
+        "Voice recognition for banking"
+      ]
+    },
+    {
+      "id": "cryptographic-hashing",
+      "title": "Cryptographic Hash Functions",
+      "content": "A cryptographic hash function is a mathematical algorithm that maps data of arbitrary size to a fixed-size output (hash value). Hash functions are deterministic, one-way, and collision-resistant.",
+      "keyPoints": [
+        "Deterministic: Same input always produces same output",
+        "One-way: Computationally infeasible to reverse",
+        "Collision-resistant: Hard to find two inputs with same hash",
+        "Avalanche effect: Small input change drastically changes output"
+      ],
+      "algorithms": [
+        {
+          "name": "SHA-256",
+          "outputSize": "256 bits (64 hexadecimal characters)",
+          "securityLevel": "High",
+          "commonUse": "Bitcoin, SSL certificates, digital signatures",
+          "speed": "Fast"
+        },
+        {
+          "name": "SHA-512",
+          "outputSize": "512 bits (128 hexadecimal characters)",
+          "securityLevel": "Very High",
+          "commonUse": "High-security applications",
+          "speed": "Moderate"
+        },
+        {
+          "name": "MD5",
+          "outputSize": "128 bits (32 hexadecimal characters)",
+          "securityLevel": "Weak (deprecated)",
+          "commonUse": "Checksums only",
+          "speed": "Very Fast"
+        }
+      ],
+      "example": {
+        "input": "Hello World",
+        "sha256": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+        "inputModified": "Hello World!",
+        "sha256Modified": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+        "observation": "Single character change completely alters the hash"
+      }
+    },
+    {
+      "id": "salt",
+      "title": "Salt in Cryptography",
+      "content": "A salt is random data added to the input before hashing. Salts prevent rainbow table attacks and ensure that identical inputs produce different hashes when different salts are used.",
+      "keyPoints": [
+        "Random, unique value generated for each user",
+        "Stored alongside the hash (not secret)",
+        "Prevents pre-computed hash attacks (rainbow tables)",
+        "Ensures unique hashes even for identical biometric data"
+      ],
+      "example": {
+        "biometricData": "[Fingerprint Template]",
+        "salt1": "a3f8c2e9b1d4567890",
+        "hash1": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+        "salt2": "f9e2a5b8c1d4e7f0a3",
+        "hash2": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+        "observation": "Same biometric + different salt = different hash"
+      },
+      "saltGeneration": {
+        "method": "Cryptographically secure random number generator",
+        "minimumLength": "16 bytes (128 bits)",
+        "recommendedLength": "32 bytes (256 bits)",
+        "format": "Hexadecimal or Base64 encoding"
+      }
+    },
+    {
+      "id": "biometric-hashing",
+      "title": "Hashing Biometric Data",
+      "content": "Combining biometric authentication with cryptographic hashing creates a secure, irreversible representation of biometric data. This protects privacy and prevents biometric theft.",
+      "keyPoints": [
+        "Raw biometric data is never stored",
+        "Only hash values are stored in database",
+        "Even database compromise doesn't reveal biometric data",
+        "Hash cannot be used to reconstruct original biometric"
+      ],
+      "process": [
+        {
+          "step": 1,
+          "name": "Capture",
+          "description": "Acquire biometric sample (e.g., fingerprint scan)",
+          "output": "Raw biometric template"
+        },
+        {
+          "step": 2,
+          "name": "Feature Extraction",
+          "description": "Extract unique features from biometric sample",
+          "output": "Feature vector (binary data)"
+        },
+        {
+          "step": 3,
+          "name": "Salt Generation",
+          "description": "Generate cryptographically random salt",
+          "output": "Random salt value"
+        },
+        {
+          "step": 4,
+          "name": "Concatenation",
+          "description": "Combine feature vector with salt",
+          "output": "Biometric + Salt"
+        },
+        {
+          "step": 5,
+          "name": "Hashing",
+          "description": "Apply SHA-256 hash function",
+          "output": "256-bit hash value"
+        },
+        {
+          "step": 6,
+          "name": "Storage",
+          "description": "Store hash and salt in database",
+          "output": "Secure storage"
+        }
+      ]
+    },
+    {
+      "id": "enrollment",
+      "title": "Enrollment Phase",
+      "content": "Enrollment is the initial registration process where a user's biometric data is captured, processed, and securely stored for future verification.",
+      "steps": [
+        "User presents biometric trait (fingerprint/face)",
+        "System captures high-quality biometric sample",
+        "Feature extraction creates biometric template",
+        "System generates unique random salt",
+        "Template + salt are hashed using SHA-256",
+        "Hash and salt are stored in secure database",
+        "User ID is linked to stored hash"
+      ],
+      "securityConsiderations": [
+        "Multiple samples may be captured for accuracy",
+        "Liveness detection prevents spoofing",
+        "Quality checks ensure reliable template",
+        "Encrypted communication channel required",
+        "Audit logging for compliance"
+      ]
+    },
+    {
+      "id": "verification",
+      "title": "Verification Phase",
+      "content": "Verification is the authentication process where a new biometric sample is captured and compared against stored hash values to confirm identity.",
+      "steps": [
+        "User presents biometric trait for verification",
+        "System captures new biometric sample",
+        "Feature extraction creates verification template",
+        "System retrieves stored salt for that user",
+        "Verification template + salt are hashed",
+        "New hash is compared with stored hash",
+        "Match/No-match decision is made",
+        "Access granted or denied based on result"
+      ],
+      "matchingThreshold": {
+        "description": "Similarity score required to accept match",
+        "strictSecurity": "0.95 - 0.99 (high security, may reject valid users)",
+        "balanced": "0.85 - 0.95 (recommended for most applications)",
+        "convenient": "0.70 - 0.85 (user-friendly, lower security)"
+      },
+      "errorTypes": [
+        {
+          "type": "False Acceptance (FAR)",
+          "description": "Accepting an impostor as genuine user",
+          "severity": "High security risk"
+        },
+        {
+          "type": "False Rejection (FRR)",
+          "description": "Rejecting a genuine user",
+          "severity": "User inconvenience"
+        }
+      ]
+    },
+    {
+      "id": "security-advantages",
+      "title": "Security Advantages",
+      "content": "Biometric cryptography provides multiple layers of security that traditional authentication methods cannot match.",
+      "advantages": [
+        {
+          "benefit": "No Password Storage",
+          "description": "Raw biometric data never stored, eliminating primary attack vector"
+        },
+        {
+          "benefit": "Irreversibility",
+          "description": "Hash cannot be reversed to obtain original biometric"
+        },
+        {
+          "benefit": "Uniqueness",
+          "description": "Each person's biometric hash is unique"
+        },
+        {
+          "benefit": "Non-transferable",
+          "description": "Cannot share or steal biometric traits like passwords"
+        },
+        {
+          "benefit": "Liveness Detection",
+          "description": "Prevents replay attacks with fake biometrics"
+        },
+        {
+          "benefit": "Multi-factor Strength",
+          "description": "Combines 'something you are' with cryptographic security"
+        }
+      ]
+    },
+    {
+      "id": "webauthn-api",
+      "title": "WebAuthn API",
+      "content": "Web Authentication API (WebAuthn) is a web standard for secure, passwordless authentication using biometrics or security keys.",
+      "keyFeatures": [
+        "Built into modern browsers (Chrome, Firefox, Safari, Edge)",
+        "Uses public-key cryptography",
+        "Supports fingerprint, face, and hardware tokens",
+        "Resistant to phishing and credential theft",
+        "Privacy-preserving (no tracking across sites)"
+      ],
+      "workflow": [
+        "User triggers authentication (e.g., clicks login)",
+        "Browser calls navigator.credentials.create() or get()",
+        "Operating system prompts for biometric",
+        "Device authenticator validates biometric locally",
+        "Cryptographic assertion is created",
+        "Server validates assertion and grants access"
+      ],
+      "browserSupport": {
+        "chrome": "67+",
+        "firefox": "60+",
+        "safari": "13+",
+        "edge": "18+",
+        "mobile": "iOS 14+, Android 7+"
+      }
+    },
+    {
+      "id": "threats-mitigations",
+      "title": "Threats and Mitigations",
+      "content": "Understanding potential security threats and implementing appropriate countermeasures.",
+      "threats": [
+        {
+          "threat": "Spoofing Attacks",
+          "description": "Using fake biometric (photo, mask, replica fingerprint)",
+          "mitigation": "Liveness detection (challenge-response, depth sensing)"
+        },
+        {
+          "threat": "Replay Attacks",
+          "description": "Intercepting and replaying biometric data",
+          "mitigation": "Nonce-based protocols, timestamp validation"
+        },
+        {
+          "threat": "Database Breach",
+          "description": "Attacker gains access to stored hashes",
+          "mitigation": "Hashing with salt prevents biometric reconstruction"
+        },
+        {
+          "threat": "Man-in-the-Middle",
+          "description": "Intercepting biometric data in transit",
+          "mitigation": "End-to-end encryption (TLS/SSL)"
+        },
+        {
+          "threat": "Template Aging",
+          "description": "Biometric traits change over time",
+          "mitigation": "Periodic re-enrollment, adaptive templates"
+        }
+      ]
+    },
+    {
+      "id": "practical-applications",
+      "title": "Real-World Applications",
+      "content": "Biometric cryptography is deployed across various industries and use cases.",
+      "applications": [
+        {
+          "domain": "Mobile Devices",
+          "examples": ["Smartphone unlock", "Mobile banking", "Payment authorization"],
+          "adoption": "Widespread"
+        },
+        {
+          "domain": "Financial Services",
+          "examples": ["ATM access", "Online banking", "Credit card verification"],
+          "adoption": "Growing"
+        },
+        {
+          "domain": "Healthcare",
+          "examples": ["Patient identification", "Medication dispensing", "Medical record access"],
+          "adoption": "Moderate"
+        },
+        {
+          "domain": "Government",
+          "examples": ["Border control", "National ID systems", "Law enforcement"],
+          "adoption": "High"
+        },
+        {
+          "domain": "Enterprise",
+          "examples": ["Building access", "Computer login", "Time tracking"],
+          "adoption": "Growing"
+        }
+      ]
+    }
+  ],
+  "glossary": {
+    "biometric": "A measurable physical or behavioral characteristic unique to an individual",
+    "hash": "Fixed-size output of a cryptographic hash function",
+    "salt": "Random data added to input before hashing",
+    "enrollment": "Process of capturing and storing biometric template",
+    "verification": "Process of comparing new biometric sample to stored template",
+    "FAR": "False Acceptance Rate - probability of accepting impostor",
+    "FRR": "False Rejection Rate - probability of rejecting genuine user",
+    "liveness": "Detection mechanism to ensure biometric is from living person",
+    "template": "Digital representation of extracted biometric features",
+    "SHA-256": "Secure Hash Algorithm producing 256-bit output"
+  },
+  "references": [
+    {
+      "title": "NIST Special Publication 800-63B",
+      "description": "Digital Identity Guidelines - Authentication and Lifecycle Management",
+      "url": "https://pages.nist.gov/800-63-3/sp800-63b.html"
+    },
+    {
+      "title": "Web Authentication: An API for accessing Public Key Credentials",
+      "description": "W3C Recommendation for WebAuthn",
+      "url": "https://www.w3.org/TR/webauthn/"
+    },
+    {
+      "title": "ISO/IEC 24745:2011",
+      "description": "Biometric information protection",
+      "url": "https://www.iso.org/standard/52946.html"
+    }
+  ]
+}

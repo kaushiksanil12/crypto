@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Crypto Biometric Authentication</title>
+    <link rel="stylesheet" href="../assets/css/design-system.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <style>
+        .page-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            min-height: 100vh;
+        }
+
+        .about-section {
+            margin-bottom: 4rem;
+        }
+
+        .about-section h2 {
+            font-size: 2rem;
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-section p {
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .tech-item {
+            background: var(--color-bg-surface);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tech-title {
+            color: var(--color-secondary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-desc {
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+        }
+
+        .info-card {
+            background: var(--color-bg-surface);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border-left: 4px solid var(--color-primary);
+            margin: 2rem 0;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+
+        <h1 style="font-size: 3rem; margin-bottom: 3rem; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            ℹ️ About This Project
+        </h1>
+
+        <div class="about-section">
+            <h2>Project Overview</h2>
+            <p>
+                This project demonstrates the integration of biometric authentication with cryptographic security principles. It showcases how modern web technologies can be combined to create secure, user-friendly authentication systems that protect user privacy while maintaining high security standards.
+            </p>
+            <p>
+                Built as an educational tool, this application provides interactive simulations of enrollment and verification processes, real-time hash generation visualization, and comprehensive explanations of underlying cryptographic concepts.
+            </p>
+        </div>
+
+        <div class="about-section">
+            <h2>Technology Stack</h2>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <div class="tech-title">Three.js</div>
+                    <div class="tech-desc">WebGL-based 3D graphics library for immersive visual experience</div>
+                </div>
+
+                <div class="tech-item">
+                    <div class="tech-title">Web Authentication API</div>
+                    <div class="tech-desc">Browser-native biometric authentication (WebAuthn/FIDO2)</div>
+                </div>
+
+                <div class="tech-item">
+                    <div class="tech-title">Web Crypto API</div>
+                    <div class="tech-desc">Native cryptographic operations including SHA-256 hashing</div>
+                </div>
+
+                <div class="tech-item">
+                    <div class="tech-title">MediaDevices API</div>
+                    <div class="tech-desc">Camera access for facial recognition simulation</div>
+                </div>
+
+                <div class="tech-item">
+                    <div class="tech-title">Vanilla JavaScript</div>
+                    <div class="tech-desc">Pure ES6+ JavaScript with no frameworks</div>
+                </div>
+
+                <div class="tech-item">
+                    <div class="tech-title">CSS3</div>
+                    <div class="tech-desc">Modern CSS with custom properties and animations</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-section">
+            <h2>Key Features</h2>
+            <div class="info-card">
+                <h3 style="color: var(--color-primary); margin-bottom: 1rem;">Interactive 3D Experience</h3>
+                <p>Advanced WebGL rendering with custom shaders, particle systems, and scroll-based animations creating an engaging learning environment.</p>
+            </div>
+
+            <div class="info-card">
+                <h3 style="color: var(--color-primary); margin-bottom: 1rem;">Real Biometric Integration</h3>
+                <p>Utilizes actual hardware biometric sensors through WebAuthn API and camera-based facial recognition for authentic demonstrations.</p>
+            </div>
+
+            <div class="info-card">
+                <h3 style="color: var(--color-primary); margin-bottom: 1rem;">Cryptographic Visualization</h3>
+                <p>Real-time visualization of SHA-256 hashing, salt generation, and hash comparison processes with educational annotations.</p>
+            </div>
+
+            <div class="info-card">
+                <h3 style="color: var(--color-primary); margin-bottom: 1rem;">Privacy-Focused Design</h3>
+                <p>All biometric processing happens locally in the browser. No data is transmitted to external servers, ensuring complete user privacy.</p>
+            </div>
+        </div>
+
+        <div class="about-section">
+            <h2>Educational Purpose</h2>
+            <p>
+                This project serves as a comprehensive educational resource for:
+            </p>
+            <ul style="line-height: 2; color: var(--color-text-muted); margin-left: 2rem;">
+                <li>Understanding cryptographic hash functions (SHA-256)</li>
+                <li>Learning about salt and its role in security</li>
+                <li>Exploring biometric authentication technologies</li>
+                <li>Studying enrollment and verification workflows</li>
+                <li>Implementing WebAuthn and Web Crypto APIs</li>
+                <li>Creating interactive 3D web experiences</li>
+            </ul>
+        </div>
+
+        <div class="about-section">
+            <h2>Security Considerations</h2>
+            <p>
+                <strong>Important Note:</strong> This is an educational demonstration project. While it implements real cryptographic functions and biometric APIs, it should not be used in production environments without additional security hardening, including:
+            </p>
+            <ul style="line-height: 2; color: var(--color-text-muted); margin-left: 2rem;">
+                <li>Server-side validation and verification</li>
+                <li>Secure key management and storage</li>
+                <li>Rate limiting and brute-force protection</li>
+                <li>Proper error handling and logging</li>
+                <li>Compliance with data protection regulations</li>
+                <li>Regular security audits and updates</li>
+            </ul>
+        </div>
+
+        <div class="about-section">
+            <h2>Browser Compatibility</h2>
+            <div class="tech-stack" style="margin-top: 1rem;">
+                <div class="tech-item">
+                    <div class="tech-title">Chrome 67+</div>
+                    <div class="tech-desc">Full support for all features</div>
+                </div>
+
+                <div class="tech-item">
+                    <div class="tech-title">Firefox 60+</div>
+                    <div class="tech-desc">Full support for all features</div>
+                </div>
+
+                <div class="tech-item">
+                    <div class="tech-title">Safari 13+</div>
+                    <div class="tech-desc">Full support for all features</div>
+                </div>
+
+                <div class="tech-item">
+                    <div class="tech-title">Edge 18+</div>
+                    <div class="tech-desc">Full support for all features</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 4rem; padding: 3rem; background: rgba(0, 255, 136, 0.1); border-radius: var(--radius-xl); border: 1px solid var(--color-primary);">
+            <h3 style="font-size: 1.75rem; color: var(--color-primary); margin-bottom: 1rem;">
+                Ready to Explore?
+            </h3>
+            <p style="color: var(--color-text-muted); margin-bottom: 2rem;">
+                Start with the simulations or dive into the theory to understand how biometric cryptography works.
+            </p>
+            <a href="simulation.html" class="btn btn--primary btn--lg">
+                Try Simulations
+            </a>
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: space-between; margin-top: 4rem;">
+            <a href="simulation.html" class="btn btn--secondary">
+                ← Previous: Simulation
+            </a>
+            <a href="../index.html" class="btn btn--primary">
+                Back to Home
+            </a>
+        </div>
+    </div>
+</body>
+</html>

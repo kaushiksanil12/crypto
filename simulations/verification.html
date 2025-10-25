@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Simulation - Crypto Biometric Authentication</title>
+    <link rel="stylesheet" href="../assets/css/design-system.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <style>
+        .page-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .simulation-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .control-panel {
+            background: var(--color-bg-surface);
+            padding: 2rem;
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .visualization-panel {
+            background: var(--color-bg-surface);
+            padding: 2rem;
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-circle {
+            background: var(--color-secondary);
+            border-color: var(--color-secondary);
+            color: var(--color-bg-dark);
+            box-shadow: 0 0 20px var(--color-secondary);
+        }
+
+        .step.completed .step-circle {
+            background: var(--color-success);
+            border-color: var(--color-success);
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--color-text-light);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--color-text-light);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-secondary);
+        }
+
+        .biometric-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .biometric-option {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .biometric-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .biometric-option.selected {
+            border-color: var(--color-secondary);
+            background: rgba(0, 204, 255, 0.1);
+        }
+
+        .biometric-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: var(--color-bg-dark);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .video-container.active {
+            display: block;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hash-display {
+            background: var(--color-bg-dark);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+            font-family: var(--font-family-mono);
+            word-break: break-all;
+            line-height: 1.8;
+        }
+
+        .hash-label {
+            color: var(--color-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hash-value {
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+        }
+
+        .hash-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .hash-box {
+            background: var(--color-bg-dark);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hash-box.match {
+            border-color: var(--color-success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .hash-box.no-match {
+            border-color: var(--color-error);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .result-card {
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .result-card.active {
+            display: block;
+        }
+
+        .result-card.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid var(--color-success);
+        }
+
+        .result-card.failure {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid var(--color-error);
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-message {
+            font-size: 1.1rem;
+            color: var(--color-text-muted);
+        }
+
+        .progress-section {
+            margin: 2rem 0;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-secondary), var(--color-purple));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .status-message {
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .status-message.active {
+            display: block;
+        }
+
+        .status-message.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--color-success);
+            color: var(--color-success);
+        }
+
+        .status-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--color-error);
+            color: var(--color-error);
+        }
+
+        .status-message.info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--color-info);
+            color: var(--color-info);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .simulation-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .control-panel {
+                position: static;
+            }
+
+            .hash-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <a href="../pages/simulation.html" class="back-link">← Back to Simulations</a>
+
+        <h1 style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--color-secondary), var(--color-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            ✓ Verification Simulation
+        </h1>
+        <p style="font-size: 1.1rem; color: var(--color-text-muted); margin-bottom: 2rem;">
+            Authenticate using your enrolled biometric identity
+        </p>
+
+        <div class="step-indicator">
+            <div class="step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Setup</div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Capture</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Retrieve Data</div>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Compute Hash</div>
+            </div>
+            <div class="step" data-step="5">
+                <div class="step-circle">5</div>
+                <div class="step-label">Compare</div>
+            </div>
+        </div>
+
+        <div class="simulation-layout">
+            <div class="control-panel">
+                <h3 style="color: var(--color-secondary); margin-bottom: 1.5rem;">Verification Controls</h3>
+
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="username" class="form-input" placeholder="Enter username" value="user_demo">
+                    <small style="color: var(--color-text-muted); font-size: 0.85rem; margin-top: 0.5rem; display: block;">
+                        Must match enrolled username
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Select Biometric Type</label>
+                    <div class="biometric-options">
+                        <div class="biometric-option selected" data-type="fingerprint">
+                            <div class="biometric-icon">👆</div>
+                            <div>Fingerprint</div>
+                        </div>
+                        <div class="biometric-option" data-type="face">
+                            <div class="biometric-icon">👤</div>
+                            <div>Face ID</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-container" id="videoContainer">
+                    <video id="cameraFeed" autoplay playsinline></video>
+                </div>
+
+                <button class="btn btn--primary btn--full-width" id="startVerification" style="background: linear-gradient(135deg, var(--color-secondary), var(--color-purple));">
+                    Start Verification
+                </button>
+
+                <div class="status-message" id="statusMessage"></div>
+
+                <div class="progress-section" id="progressSection" style="display: none;">
+                    <div style="color: var(--color-text-muted); margin-bottom: 0.5rem;" id="progressText">
+                        Initializing...
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="progressBar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="visualization-panel">
+                <h3 style="color: var(--color-secondary); margin-bottom: 1.5rem;">Real-Time Comparison</h3>
+
+                <div class="hash-display">
+                    <div class="hash-label">Captured Biometric Template</div>
+                    <div class="hash-value" id="capturedTemplate">Waiting for capture...</div>
+                </div>
+
+                <div class="hash-display">
+                    <div class="hash-label">Retrieved Salt</div>
+                    <div class="hash-value" id="retrievedSalt">Not retrieved yet</div>
+                </div>
+
+                <div class="hash-comparison">
+                    <div class="hash-box" id="storedHashBox">
+                        <div class="hash-label">Stored Hash</div>
+                        <div class="hash-value" id="storedHash">Not retrieved yet</div>
+                    </div>
+
+                    <div class="hash-box" id="computedHashBox">
+                        <div class="hash-label">Computed Hash</div>
+                        <div class="hash-value" id="computedHash">Not computed yet</div>
+                    </div>
+                </div>
+
+                <div class="result-card" id="resultCard">
+                    <div class="result-icon" id="resultIcon"></div>
+                    <div class="result-title" id="resultTitle"></div>
+                    <div class="result-message" id="resultMessage"></div>
+                </div>
+
+                <div class="hash-display">
+                    <div class="hash-label">Verification Details</div>
+                    <div class="hash-value">
+                        <div>User ID: <span id="verifiedUserId">-</span></div>
+                        <div>Match Status: <span id="matchStatus">-</span></div>
+                        <div>Similarity: <span id="similarity">-</span></div>
+                        <div>Timestamp: <span id="timestamp">-</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="../assets/js/core/utils.js"></script>
+    <script src="../assets/js/crypto/hash-generator.js"></script>
+    <script src="../assets/js/biometric/webauthn-handler.js"></script>
+    <script src="../assets/js/biometric/face-detection.js"></script>
+    <script src="../assets/js/biometric/biometric-storage.js"></script>
+    <script src="../assets/js/simulation/verification-sim.js"></script>
+    <script src="../assets/js/ui/notification.js"></script>
+    <script>
+        // Initialize components
+        const storage = new BiometricStorage();
+        const verificationSim = new VerificationSimulation();
+        
+        let selectedBiometricType = 'fingerprint';
+        let currentStep = 1;
+
+        // Initialize verification simulation
+        verificationSim.init();
+
+        // Biometric type selection
+        document.querySelectorAll('.biometric-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.biometric-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                option.classList.add('selected');
+                selectedBiometricType = option.dataset.type;
+
+                if (selectedBiometricType === 'face') {
+                    document.getElementById('videoContainer').classList.add('active');
+                } else {
+                    document.getElementById('videoContainer').classList.remove('active');
+                }
+            });
+        });
+
+        // Update step indicator
+        function updateStep(step) {
+            currentStep = step;
+            document.querySelectorAll('.step').forEach((el, index) => {
+                el.classList.remove('active', 'completed');
+                if (index + 1 < step) {
+                    el.classList.add('completed');
+                } else if (index + 1 === step) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = `status-message active ${type}`;
+        }
+
+        // Update progress
+        function updateProgress(progress, text) {
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('progressBar').style.width = `${progress * 100}%`;
+            document.getElementById('progressText').textContent = text;
+        }
+
+        // Show result
+        function showResult(success, title, message) {
+            const resultCard = document.getElementById('resultCard');
+            const resultIcon = document.getElementById('resultIcon');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultMessage = document.getElementById('resultMessage');
+
+            resultCard.className = `result-card active ${success ? 'success' : 'failure'}`;
+            resultIcon.textContent = success ? '✓' : '✗';
+            resultTitle.textContent = title;
+            resultMessage.textContent = message;
+        }
+
+        // Verification simulation callbacks
+        verificationSim.on('onStepChange', (data) => {
+            updateStep(data.index + 1);
+        });
+
+        verificationSim.on('onProgress', (data) => {
+            updateProgress(data.progress, data.message);
+        });
+
+        verificationSim.on('onComplete', (data) => {
+            updateStep(6);
+            
+            // Update visualization
+            document.getElementById('capturedTemplate').textContent = 
+                `[Binary Template - ${data.type}] ${data.computedHash.substring(0, 32)}...`;
+            document.getElementById('retrievedSalt').textContent = 'Salt retrieved from storage';
+            document.getElementById('storedHash').textContent = data.storedHash;
+            document.getElementById('computedHash').textContent = data.computedHash;
+            
+            // Update hash boxes
+            const storedBox = document.getElementById('storedHashBox');
+            const computedBox = document.getElementById('computedHashBox');
+            
+            if (data.match) {
+                storedBox.classList.add('match');
+                computedBox.classList.add('match');
+                showResult(true, 'Authentication Successful!', 'Biometric verification passed. Access granted.');
+                notifications.success('Verification successful! Hashes match.');
+            } else {
+                storedBox.classList.add('no-match');
+                computedBox.classList.add('no-match');
+                showResult(false, 'Authentication Failed', 'Biometric verification failed. Access denied.');
+                notifications.error('Verification failed! Hashes do not match.');
+            }
+            
+            // Update details
+            document.getElementById('verifiedUserId').textContent = data.username;
+            document.getElementById('matchStatus').textContent = data.match ? 'Match ✓' : 'No Match ✗';
+            document.getElementById('similarity').textContent = `${(data.similarity * 100).toFixed(2)}%`;
+            document.getElementById('timestamp').textContent = new Date(data.timestamp).toLocaleString();
+        });
+
+        verificationSim.on('onError', (error) => {
+            showStatus(`Error: ${error.message}`, 'error');
+            showResult(false, 'Verification Error', error.message);
+            notifications.error(`Verification failed: ${error.message}`);
+        });
+
+        // Start verification button
+        document.getElementById('startVerification').addEventListener('click', async () => {
+            const username = document.getElementById('username').value.trim();
+            
+            if (!username) {
+                notifications.warning('Please enter a username');
+                return;
+            }
+
+            // Reset UI
+            document.getElementById('storedHashBox').className = 'hash-box';
+            document.getElementById('computedHashBox').className = 'hash-box';
+            document.getElementById('resultCard').classList.remove('active');
+
+            updateStep(2);
+            showStatus('Initializing verification...', 'info');
+
+            try {
+                if (selectedBiometricType === 'fingerprint') {
+                    await verificationSim.verifyFingerprint(username);
+                } else {
+                    const videoElement = document.getElementById('cameraFeed');
+                    await verificationSim.verifyFace(username, videoElement);
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+            }
+        });
+
+        // Show initial message
+        showStatus('Enter your username and click "Start Verification" to authenticate', 'info');
+    </script>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Demo - Crypto Biometric Authentication</title>
+    <link rel="stylesheet" href="../assets/css/design-system.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <style>
+        .page-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .demo-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .control-panel {
+            background: var(--color-bg-surface);
+            padding: 2rem;
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: fit-content;
+        }
+
+        .visualization-panel {
+            background: var(--color-bg-surface);
+            padding: 2rem;
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--color-text-light);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--color-text-light);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: var(--font-family-mono);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-purple);
+        }
+
+        textarea.form-input {
+            min-height: 120px;
+            resize: vertical;
+            font-family: var(--font-family-base);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .hash-display-box {
+            background: var(--color-bg-dark);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+            min-height: 100px;
+        }
+
+        .hash-label {
+            color: var(--color-purple);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .copy-button {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid var(--color-purple);
+            color: var(--color-purple);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background: rgba(168, 85, 247, 0.3);
+        }
+
+        .hash-value {
+            color: var(--color-text-light);
+            font-family: var(--font-family-mono);
+            font-size: 0.9rem;
+            word-break: break-all;
+            line-height: 1.8;
+        }
+
+        .hash-char {
+            display: inline-block;
+            animation: fadeIn 0.05s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .info-box {
+            background: rgba(168, 85, 247, 0.1);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-purple);
+            margin: 1rem 0;
+        }
+
+        .info-box-title {
+            color: var(--color-purple);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .info-box-text {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .comparison-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .avalanche-demo {
+            background: rgba(255, 107, 53, 0.1);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-accent);
+            margin-top: 1rem;
+        }
+
+        .hash-comparison {
+            display: grid;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .hash-row {
+            display: flex;
+            gap: 0.25rem;
+            font-family: var(--font-family-mono);
+            font-size: 0.85rem;
+        }
+
+        .hash-char-match {
+            color: var(--color-success);
+        }
+
+        .hash-char-diff {
+            color: var(--color-error);
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-purple);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .demo-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <a href="../pages/simulation.html" class="back-link">← Back to Simulations</a>
+
+        <h1 style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--color-purple), var(--color-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            # Hash Demo
+        </h1>
+        <p style="font-size: 1.1rem; color: var(--color-text-muted); margin-bottom: 2rem;">
+            Interactive SHA-256 hash generation with salt and avalanche effect demonstration
+        </p>
+
+        <div class="demo-layout">
+            <div class="control-panel">
+                <h3 style="color: var(--color-purple); margin-bottom: 1.5rem;">Input Controls</h3>
+
+                <div class="form-group">
+                    <label class="form-label">Input Text</label>
+                    <textarea id="inputText" class="form-input" placeholder="Enter text to hash...">Hello World</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Salt (Optional)</label>
+                    <input type="text" id="saltInput" class="form-input" placeholder="Enter salt or generate random">
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn--primary" id="generateSalt" style="background: linear-gradient(135deg, var(--color-purple), var(--color-accent));">
+                        Generate Salt
+                    </button>
+                    <button class="btn btn--primary" id="computeHash" style="background: linear-gradient(135deg, var(--color-purple), var(--color-accent));">
+                        Compute Hash
+                    </button>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-title">💡 What is SHA-256?</div>
+                    <div class="info-box-text">
+                        SHA-256 is a cryptographic hash function that produces a fixed 256-bit (64 character) hash value from any input. It's one-way and collision-resistant.
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-title">🧂 Why Use Salt?</div>
+                    <div class="info-box-text">
+                        Salt adds random data to prevent rainbow table attacks and ensures identical inputs with different salts produce different hashes.
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 2rem;">
+                    <label class="form-label">Avalanche Effect Demo</label>
+                    <button class="btn btn--secondary btn--full-width" id="demoAvalanche">
+                        See Avalanche Effect
+                    </button>
+                    <small style="color: var(--color-text-muted); font-size: 0.85rem; margin-top: 0.5rem; display: block;">
+                        Small input change drastically changes output
+                    </small>
+                </div>
+            </div>
+
+            <div class="visualization-panel">
+                <h3 style="color: var(--color-purple); margin-bottom: 1.5rem;">Hash Visualization</h3>
+
+                <div class="hash-display-box">
+                    <div class="hash-label">
+                        <span>Input Text</span>
+                    </div>
+                    <div class="hash-value" id="displayInput">-</div>
+                </div>
+
+                <div class="hash-display-box">
+                    <div class="hash-label">
+                        <span>Salt Value</span>
+                        <button class="copy-button" id="copySalt">Copy</button>
+                    </div>
+                    <div class="hash-value" id="displaySalt">Not generated yet</div>
+                </div>
+
+                <div class="hash-display-box">
+                    <div class="hash-label">
+                        <span>SHA-256 Hash</span>
+                        <button class="copy-button" id="copyHash">Copy</button>
+                    </div>
+                    <div class="hash-value" id="displayHash">Not computed yet</div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value" id="inputLength">0</div>
+                        <div class="stat-label">Input Length</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="saltLength">0</div>
+                        <div class="stat-label">Salt Length</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">64</div>
+                        <div class="stat-label">Hash Length</div>
+                    </div>
+                </div>
+
+                <div class="comparison-section" id="comparisonSection" style="display: none;">
+                    <h4 style="color: var(--color-accent); margin-bottom: 1rem;">Avalanche Effect Demonstration</h4>
+                    
+                    <div class="avalanche-demo">
+                        <div style="margin-bottom: 1rem;">
+                            <strong style="color: var(--color-text-light);">Original Input:</strong>
+                            <div id="avalancheInput1" style="font-family: var(--font-family-mono); color: var(--color-text-muted); margin-top: 0.5rem;">-</div>
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <strong style="color: var(--color-text-light);">Modified Input:</strong>
+                            <div id="avalancheInput2" style="font-family: var(--font-family-mono); color: var(--color-text-muted); margin-top: 0.5rem;">-</div>
+                        </div>
+
+                        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255, 107, 53, 0.3);">
+                            <strong style="color: var(--color-text-light);">Hash Comparison:</strong>
+                            <div class="hash-comparison" id="hashComparison"></div>
+                        </div>
+
+                        <div style="margin-top: 1rem; text-align: center;">
+                            <span style="color: var(--color-accent); font-weight: 600;" id="differenceCount">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="../assets/js/core/utils.js"></script>
+    <script src="../assets/js/crypto/hash-generator.js"></script>
+    <script src="../assets/js/crypto/salt-generator.js"></script>
+    <script src="../assets/js/ui/notification.js"></script>
+    <script>
+        // Initialize
+        const hashGenerator = new HashGenerator();
+        const saltGenerator = new SaltGenerator();
+        let currentHash = '';
+        let currentSalt = '';
+
+        // Generate Salt
+        document.getElementById('generateSalt').addEventListener('click', () => {
+            const salt = saltGenerator.generate(32);
+            document.getElementById('saltInput').value = salt;
+            currentSalt = salt;
+            document.getElementById('displaySalt').textContent = salt;
+            document.getElementById('saltLength').textContent = salt.length;
+            notifications.success('Salt generated successfully!');
+        });
+
+        // Compute Hash
+        document.getElementById('computeHash').addEventListener('click', async () => {
+            const inputText = document.getElementById('inputText').value;
+            const salt = document.getElementById('saltInput').value;
+
+            if (!inputText) {
+                notifications.warning('Please enter input text');
+                return;
+            }
+
+            try {
+                const hash = salt 
+                    ? await hashGenerator.hashWithSalt(inputText, salt)
+                    : await hashGenerator.sha256(inputText);
+
+                currentHash = hash;
+                currentSalt = salt;
+
+                // Animated hash display
+                const hashDisplay = document.getElementById('displayHash');
+                hashDisplay.innerHTML = '';
+                
+                for (let i = 0; i < hash.length; i++) {
+                    setTimeout(() => {
+                        const span = document.createElement('span');
+                        span.className = 'hash-char';
+                        span.textContent = hash[i];
+                        span.style.animationDelay = `${i * 0.01}s`;
+                        hashDisplay.appendChild(span);
+                    }, i * 10);
+                }
+
+                // Update displays
+                document.getElementById('displayInput').textContent = inputText;
+                document.getElementById('inputLength').textContent = inputText.length;
+                
+                if (salt) {
+                    document.getElementById('displaySalt').textContent = salt;
+                    document.getElementById('saltLength').textContent = salt.length;
+                }
+
+                notifications.success('Hash computed successfully!');
+            } catch (error) {
+                notifications.error('Failed to compute hash');
+                console.error(error);
+            }
+        });
+
+        // Avalanche Effect Demo
+        document.getElementById('demoAvalanche').addEventListener('click', async () => {
+            const input = document.getElementById('inputText').value || 'Hello World';
+            const modifiedInput = input + '!'; // Add one character
+
+            const hash1 = await hashGenerator.sha256(input);
+            const hash2 = await hashGenerator.sha256(modifiedInput);
+
+            // Display inputs
+            document.getElementById('avalancheInput1').textContent = input;
+            document.getElementById('avalancheInput2').textContent = modifiedInput;
+
+            // Compare hashes character by character
+            const comparisonDiv = document.getElementById('hashComparison');
+            comparisonDiv.innerHTML = '';
+            
+            let differences = 0;
+            const charsPerRow = 32;
+
+            for (let i = 0; i < hash1.length; i += charsPerRow) {
+                const row = document.createElement('div');
+                row.className = 'hash-row';
+                
+                for (let j = i; j < Math.min(i + charsPerRow, hash1.length); j++) {
+                    const span = document.createElement('span');
+                    span.textContent = hash1[j];
+                    
+                    if (hash1[j] !== hash2[j]) {
+                        span.className = 'hash-char-diff';
+                        differences++;
+                    } else {
+                        span.className = 'hash-char-match';
+                    }
+                    
+                    row.appendChild(span);
+                }
+                
+                comparisonDiv.appendChild(row);
+            }
+
+            document.getElementById('differenceCount').textContent = 
+                `${differences} out of 64 characters changed (${((differences/64)*100).toFixed(1)}%)`;
+
+            document.getElementById('comparisonSection').style.display = 'block';
+            
+            notifications.info('Avalanche effect demonstrated! See how one character change affects the entire hash.');
+        });
+
+        // Copy buttons
+        document.getElementById('copySalt').addEventListener('click', () => {
+            const salt = document.getElementById('displaySalt').textContent;
+            if (salt !== 'Not generated yet') {
+                navigator.clipboard.writeText(salt);
+                notifications.success('Salt copied to clipboard!');
+            }
+        });
+
+        document.getElementById('copyHash').addEventListener('click', () => {
+            const hash = currentHash;
+            if (hash) {
+                navigator.clipboard.writeText(hash);
+                notifications.success('Hash copied to clipboard!');
+            }
+        });
+
+        // Initial computation
+        document.getElementById('computeHash').click();
+    </script>
+</body>
+</html>

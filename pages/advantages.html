@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advantages - Crypto Biometric Authentication</title>
+    <link rel="stylesheet" href="../assets/css/design-system.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <style>
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            min-height: 100vh;
+        }
+
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .advantage-card {
+            background: var(--color-bg-surface);
+            padding: 2.5rem;
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .advantage-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .advantage-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--color-primary);
+        }
+
+        .advantage-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .advantage-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .advantage-title {
+            font-size: 1.75rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .advantage-description {
+            color: var(--color-text-muted);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .advantage-points {
+            list-style: none;
+            padding: 0;
+        }
+
+        .advantage-points li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--color-text-muted);
+        }
+
+        .advantage-points li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+
+        .comparison-section {
+            margin-top: 5rem;
+            background: var(--color-bg-surface);
+            padding: 3rem;
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table {
+            width: 100%;
+            margin-top: 2rem;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table th {
+            color: var(--color-primary);
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .comparison-table td {
+            color: var(--color-text-muted);
+        }
+
+        .check-mark {
+            color: var(--color-success);
+            font-weight: bold;
+        }
+
+        .cross-mark {
+            color: var(--color-error);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .advantages-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+
+        <h1 style="font-size: 3rem; margin-bottom: 1rem; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            ✨ Advantages
+        </h1>
+        <p style="font-size: 1.25rem; color: var(--color-text-muted); margin-bottom: 3rem;">
+            Why biometric cryptography is the future of secure authentication
+        </p>
+
+        <div class="advantages-grid">
+            <div class="advantage-card">
+                <span class="advantage-icon">🛡️</span>
+                <h3 class="advantage-title">Enhanced Security</h3>
+                <p class="advantage-description">
+                    Raw biometric data is never stored, eliminating the primary attack vector for identity theft. Only irreversible hash values are maintained.
+                </p>
+                <ul class="advantage-points">
+                    <li>No plaintext biometric storage</li>
+                    <li>Database breaches don't expose biometrics</li>
+                    <li>Impossible to reconstruct original data</li>
+                    <li>Mathematical guarantee of security</li>
+                </ul>
+            </div>
+
+            <div class="advantage-card">
+                <span class="advantage-icon">🔒</span>
+                <h3 class="advantage-title">Irreversibility</h3>
+                <p class="advantage-description">
+                    SHA-256 is a one-way cryptographic function. Once biometric data is hashed, it cannot be reversed to obtain the original biometric template.
+                </p>
+                <ul class="advantage-points">
+                    <li>One-way mathematical transformation</li>
+                    <li>Computationally infeasible to reverse</li>
+                    <li>Protects user privacy permanently</li>
+                    <li>Industry-standard algorithm</li>
+                </ul>
+            </div>
+
+            <div class="advantage-card">
+                <span class="advantage-icon">🎯</span>
+                <h3 class="advantage-title">Uniqueness</h3>
+                <p class="advantage-description">
+                    Each person's biometric traits are unique. Combined with individual salts, this ensures no two users have identical stored values.
+                </p>
+                <ul class="advantage-points">
+                    <li>Biologically unique identifiers</li>
+                    <li>Cannot be shared or transferred</li>
+                    <li>Impossible to duplicate</li>
+                    <li>Lifetime validity</li>
+                </ul>
+            </div>
+
+            <div class="advantage-card">
+                <span class="advantage-icon">⚡</span>
+                <h3 class="advantage-title">Fast Verification</h3>
+                <p class="advantage-description">
+                    Hash comparison is extremely fast, typically completing in milliseconds. This ensures quick authentication without sacrificing security.
+                </p>
+                <ul class="advantage-points">
+                    <li>Instant hash computation</li>
+                    <li>O(n) comparison complexity</li>
+                    <li>No network latency</li>
+                    <li>Responsive user experience</li>
+                </ul>
+            </div>
+
+            <div class="advantage-card">
+                <span class="advantage-icon">🚫</span>
+                <h3 class="advantage-title">Rainbow Table Resistance</h3>
+                <p class="advantage-description">
+                    Salt addition prevents pre-computed hash attacks. Each salt is unique and cryptographically random, making rainbow tables useless.
+                </p>
+                <ul class="advantage-points">
+                    <li>Unique salt per enrollment</li>
+                    <li>Prevents pre-computed attacks</li>
+                    <li>256-bit entropy (32-byte salt)</li>
+                    <li>Renders hash tables ineffective</li>
+                </ul>
+            </div>
+
+            <div class="advantage-card">
+                <span class="advantage-icon">🔐</span>
+                <h3 class="advantage-title">No Password Management</h3>
+                <p class="advantage-description">
+                    Users don't need to remember passwords, reducing password reuse and eliminating weak password vulnerabilities.
+                </p>
+                <ul class="advantage-points">
+                    <li>No forgotten passwords</li>
+                    <li>No password reset flows</li>
+                    <li>Eliminates phishing risk</li>
+                    <li>Better user experience</li>
+                </ul>
+            </div>
+
+            <div class="advantage-card">
+                <span class="advantage-icon">🌐</span>
+                <h3 class="advantage-title">Cross-Platform</h3>
+                <p class="advantage-description">
+                    WebAuthn API provides standardized biometric authentication across devices and browsers, ensuring consistent security.
+                </p>
+                <ul class="advantage-points">
+                    <li>Works on Windows, Mac, iOS, Android</li>
+                    <li>Browser-native support</li>
+                    <li>Hardware-backed security</li>
+                    <li>FIDO2 compliant</li>
+                </ul>
+            </div>
+
+            <div class="advantage-card">
+                <span class="advantage-icon">📊</span>
+                <h3 class="advantage-title">Audit Trail</h3>
+                <p class="advantage-description">
+                    Every authentication attempt can be logged with timestamps, providing comprehensive audit trails for compliance.
+                </p>
+                <ul class="advantage-points">
+                    <li>Detailed access logs</li>
+                    <li>Timestamp tracking</li>
+                    <li>Device information</li>
+                    <li>Success/failure tracking</li>
+                </ul>
+            </div>
+
+            <div class="advantage-card">
+                <span class="advantage-icon">💰</span>
+                <h3 class="advantage-title">Cost Effective</h3>
+                <p class="advantage-description">
+                    Reduces costs associated with password resets, account recovery, and security breaches. No additional hardware required.
+                </p>
+                <ul class="advantage-points">
+                    <li>Lower support costs</li>
+                    <li>Reduced breach impact</li>
+                    <li>No specialized hardware needed</li>
+                    <li>Uses existing sensors</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="comparison-section">
+            <h2 style="font-size: 2.5rem; color: var(--color-primary); margin-bottom: 1rem;">
+                Security Comparison
+            </h2>
+            <p style="color: var(--color-text-muted); margin-bottom: 2rem;">
+                How biometric cryptography compares to traditional authentication methods
+            </p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Passwords</th>
+                        <th>2FA (SMS)</th>
+                        <th>Biometric Hash</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Phishing Resistant</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Cannot be Stolen</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>No User Memory Required</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Database Breach Safe</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Unique Per User</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Fast Authentication</td>
+                        <td class="check-mark">✓</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>No Additional Device</td>
+                        <td class="check-mark">✓</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Cryptographically Secure</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="cross-mark">✗</td>
+                        <td class="check-mark">✓</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: space-between; margin-top: 4rem;">
+            <a href="procedure.html" class="btn btn--secondary">
+                ← Previous: Procedure
+            </a>
+            <a href="simulation.html" class="btn btn--primary">
+                Next: Simulation →
+            </a>
+        </div>
+    </div>
+</body>
+</html>

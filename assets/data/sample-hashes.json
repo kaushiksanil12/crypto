@@ -1,0 +1,134 @@
+{
+  "version": "1.0.0",
+  "description": "Sample biometric hash data for demonstration purposes",
+  "lastUpdated": "2025-10-25T18:53:00+05:30",
+  "samples": [
+    {
+      "id": "sample-001",
+      "type": "fingerprint",
+      "user": "John Doe",
+      "enrollmentDate": "2025-10-20T14:30:00+05:30",
+      "salt": "a3f8c2e9b1d4567890abcdef12345678",
+      "hash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "algorithm": "SHA-256",
+      "hashLength": 64,
+      "saltLength": 32,
+      "iterations": 1,
+      "metadata": {
+        "device": "Windows Hello Fingerprint Scanner",
+        "confidence": 0.98,
+        "templateSize": "2048 bytes"
+      }
+    },
+    {
+      "id": "sample-002",
+      "type": "face",
+      "user": "Jane Smith",
+      "enrollmentDate": "2025-10-21T10:15:00+05:30",
+      "salt": "f9e2a5b8c1d4e7f0a3b6c9d2e5f8a1b4",
+      "hash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+      "algorithm": "SHA-256",
+      "hashLength": 64,
+      "saltLength": 32,
+      "iterations": 1,
+      "metadata": {
+        "device": "Windows Hello Face Camera",
+        "confidence": 0.95,
+        "templateSize": "4096 bytes"
+      }
+    },
+    {
+      "id": "sample-003",
+      "type": "fingerprint",
+      "user": "Alex Johnson",
+      "enrollmentDate": "2025-10-22T16:45:00+05:30",
+      "salt": "b7c4d1e8f5a2968307c4d1e8f5a29683",
+      "hash": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+      "algorithm": "SHA-256",
+      "hashLength": 64,
+      "saltLength": 32,
+      "iterations": 1,
+      "metadata": {
+        "device": "Touch ID Sensor",
+        "confidence": 0.99,
+        "templateSize": "1536 bytes"
+      }
+    },
+    {
+      "id": "sample-004",
+      "type": "face",
+      "user": "Maria Garcia",
+      "enrollmentDate": "2025-10-23T09:20:00+05:30",
+      "salt": "c8d5e2f9a6b3c0d7e4f1a8b5c2d9e6f3",
+      "hash": "fcde2b2edba56bf408601fb721fe9b5c338d10ee429ea04fae5511b68fbf8fb9",
+      "algorithm": "SHA-256",
+      "hashLength": 64,
+      "saltLength": 32,
+      "iterations": 1,
+      "metadata": {
+        "device": "Face ID Camera (iPhone)",
+        "confidence": 0.97,
+        "templateSize": "5120 bytes"
+      }
+    }
+  ],
+  "statistics": {
+    "totalSamples": 4,
+    "fingerprintSamples": 2,
+    "faceSamples": 2,
+    "averageConfidence": 0.9725,
+    "algorithmsUsed": ["SHA-256"],
+    "uniqueDevices": 4
+  },
+  "verificationExamples": [
+    {
+      "sampleId": "sample-001",
+      "verificationAttempts": [
+        {
+          "timestamp": "2025-10-24T11:30:00+05:30",
+          "inputHash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+          "storedHash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+          "match": true,
+          "confidence": 0.98,
+          "responseTime": "120ms"
+        },
+        {
+          "timestamp": "2025-10-24T15:45:00+05:30",
+          "inputHash": "7c859eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c11",
+          "storedHash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+          "match": false,
+          "confidence": 0.42,
+          "responseTime": "115ms"
+        }
+      ]
+    }
+  ],
+  "hashComparison": {
+    "description": "Examples showing how hash changes with different salts",
+    "originalBiometric": "[REDACTED - Binary fingerprint template]",
+    "examples": [
+      {
+        "salt": "salt123456789abcdef",
+        "hash": "a1b2c3d4e5f6789012345678901234567890abcdefabcdef1234567890abcdef",
+        "note": "Same biometric, different salt"
+      },
+      {
+        "salt": "differentsalt789xyz",
+        "hash": "9f8e7d6c5b4a39281716151413121110fedcba9876543210fedcba9876543210",
+        "note": "Same biometric, different salt produces completely different hash"
+      },
+      {
+        "salt": "salt123456789abcdef",
+        "hash": "b2c3d4e5f6789012345678901234567890abcdefabcdef1234567890abcdef12",
+        "note": "Different biometric, same salt as first example"
+      }
+    ]
+  },
+  "securityNotes": {
+    "saltPurpose": "Prevents rainbow table attacks and ensures unique hashes even for identical biometric data",
+    "hashIrreversibility": "SHA-256 is a one-way function - impossible to retrieve original biometric from hash",
+    "storageRecommendation": "Store hash and salt in separate secure databases with encryption at rest",
+    "transmissionSecurity": "Always use HTTPS/TLS when transmitting biometric data or hashes",
+    "collisionResistance": "SHA-256 has 2^256 possible outputs, making collisions computationally infeasible"
+  }
+}

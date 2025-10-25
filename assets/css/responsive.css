@@ -1,0 +1,217 @@
+/**
+ * Responsive Styles - Media queries and mobile optimizations
+ */
+
+/* Large Desktops (1440px+) */
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .content-box {
+        max-width: 800px;
+    }
+}
+
+/* Desktop (1024px - 1439px) */
+@media (max-width: 1439px) and (min-width: 1024px) {
+    .content-box {
+        max-width: 700px;
+    }
+}
+
+/* Tablets (768px - 1023px) */
+@media (max-width: 1023px) and (min-width: 768px) {
+    .content-box {
+        padding: var(--space-xl);
+        max-width: 600px;
+    }
+    
+    .scene-info {
+        top: var(--space-md);
+        right: var(--space-md);
+    }
+    
+    .scene-number {
+        font-size: var(--text-3xl);
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md);
+    }
+}
+
+/* Mobile Landscape (640px - 767px) */
+@media (max-width: 767px) and (min-width: 640px) {
+    .content-box {
+        padding: var(--space-lg);
+        max-width: 500px;
+    }
+    
+    h1 {
+        font-size: clamp(2rem, 5vw, 3rem);
+    }
+    
+    h2 {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Mobile Portrait (< 640px) */
+@media (max-width: 639px) {
+    .section {
+        padding: var(--space-md);
+    }
+    
+    .content-box {
+        padding: var(--space-lg);
+        max-width: 100%;
+        border-radius: var(--radius-lg);
+    }
+    
+    h1 {
+        font-size: clamp(1.8rem, 8vw, 2.5rem);
+        margin-bottom: var(--space-md);
+    }
+    
+    h2 {
+        font-size: clamp(1.4rem, 6vw, 2rem);
+        margin-bottom: var(--space-sm);
+    }
+    
+    p {
+        font-size: var(--text-base);
+        margin-bottom: var(--space-md);
+    }
+    
+    .cta-button {
+        padding: var(--space-sm) var(--space-xl);
+        font-size: var(--text-base);
+        display: block;
+        width: 100%;
+        margin-top: var(--space-sm);
+    }
+    
+    .scene-info {
+        top: var(--space-md);
+        right: var(--space-md);
+    }
+    
+    .scene-number {
+        font-size: var(--text-3xl);
+    }
+    
+    .scene-label {
+        font-size: 0.65rem;
+    }
+    
+    .scene-title {
+        font-size: 0.8rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+    
+    .feature-card {
+        padding: var(--space-md);
+    }
+    
+    .feature-icon {
+        font-size: var(--text-3xl);
+    }
+    
+    .scroll-indicator {
+        bottom: var(--space-lg);
+        font-size: var(--text-xs);
+    }
+    
+    .interaction-hint {
+        bottom: calc(var(--space-3xl));
+        font-size: var(--text-xs);
+        padding: 0 var(--space-md);
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .hover-lift:hover,
+    .hover-scale:hover,
+    .hover-glow:hover {
+        transform: none;
+        filter: none;
+    }
+    
+    .cta-button:hover {
+        transform: none;
+    }
+    
+    canvas {
+        cursor: default;
+    }
+    
+    canvas:active {
+        cursor: default;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .scroll-indicator {
+        animation: none;
+    }
+    
+    .loader {
+        animation: none;
+        border-top-color: var(--color-primary);
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .content-box {
+        border: 2px solid var(--color-text-light);
+    }
+    
+    .cta-button {
+        border: 2px solid var(--color-bg-dark);
+    }
+}
+
+/* Print Styles */
+@media print {
+    #canvas-container,
+    .scroll-indicator,
+    .interaction-hint,
+    .scene-info,
+    .progress-bar,
+    .loading-screen {
+        display: none !important;
+    }
+    
+    .content-box {
+        background: white;
+        color: black;
+        box-shadow: none;
+        page-break-inside: avoid;
+    }
+    
+    .section {
+        page-break-after: always;
+    }
+}

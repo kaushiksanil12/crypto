@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procedure - Crypto Biometric Authentication</title>
+    <link rel="stylesheet" href="../assets/css/design-system.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <style>
+        .page-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            min-height: 100vh;
+        }
+
+        .procedure-phase {
+            margin-bottom: 4rem;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .phase-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .phase-title {
+            font-size: 2.5rem;
+            color: var(--color-primary);
+            margin: 0;
+        }
+
+        .steps-container {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            left: 1.25rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--color-primary), var(--color-secondary));
+        }
+
+        .step {
+            position: relative;
+            margin-bottom: 2.5rem;
+            background: var(--color-bg-surface);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .step::before {
+            content: attr(data-step);
+            position: absolute;
+            left: -3rem;
+            top: 2rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--color-bg-dark);
+            z-index: 1;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            color: var(--color-secondary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .step-description {
+            color: var(--color-text-muted);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .step-code {
+            background: var(--color-bg-dark);
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--color-primary);
+            font-family: var(--font-family-mono);
+            font-size: 0.9rem;
+            color: var(--color-primary);
+            margin-top: 1rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .comparison-card {
+            background: var(--color-bg-surface);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--color-primary);
+        }
+
+        .comparison-card h3 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-container {
+                padding-left: 2rem;
+            }
+
+            .step::before {
+                left: -2rem;
+                width: 2rem;
+                height: 2rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+
+        <h1 style="font-size: 3rem; margin-bottom: 3rem; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            ⚙️ Procedure
+        </h1>
+
+        <!-- Enrollment Phase -->
+        <div class="procedure-phase">
+            <div class="phase-header">
+                <div class="phase-icon">📝</div>
+                <h2 class="phase-title">Enrollment Phase</h2>
+            </div>
+
+            <p style="font-size: 1.1rem; color: var(--color-text-muted); margin-bottom: 2rem;">
+                The enrollment phase is the initial registration process where a user's biometric data is captured, hashed, and securely stored.
+            </p>
+
+            <div class="steps-container">
+                <div class="step" data-step="1">
+                    <h3 class="step-title">Capture Biometric Data</h3>
+                    <p class="step-description">
+                        User presents their biometric trait (fingerprint via sensor or face via camera). The system captures a high-quality sample of the biometric.
+                    </p>
+                    <div class="step-code">
+                        // Fingerprint: WebAuthn API<br>
+                        const credential = await navigator.credentials.create({...});<br><br>
+                        // Face: Camera API<br>
+                        const imageData = await captureFromCamera();
+                    </div>
+                </div>
+
+                <div class="step" data-step="2">
+                    <h3 class="step-title">Extract Features</h3>
+                    <p class="step-description">
+                        Convert the raw biometric sample into a digital template by extracting unique features. For fingerprints, this includes ridge patterns and minutiae points. For faces, this includes facial landmarks and geometry.
+                    </p>
+                    <div class="step-code">
+                        const template = extractBiometricFeatures(rawData);<br>
+                        // Template: Binary representation of unique features
+                    </div>
+                </div>
+
+                <div class="step" data-step="3">
+                    <h3 class="step-title">Generate Salt</h3>
+                    <p class="step-description">
+                        Create a cryptographically secure random salt (minimum 32 bytes). This salt will be unique to this enrollment and prevents rainbow table attacks.
+                    </p>
+                    <div class="step-code">
+                        const salt = crypto.getRandomValues(new Uint8Array(32));<br>
+                        // Salt: "a3f8c2e9b1d4567890abcdef12345678..."
+                    </div>
+                </div>
+
+                <div class="step" data-step="4">
+                    <h3 class="step-title">Compute Hash</h3>
+                    <p class="step-description">
+                        Concatenate the biometric template with the salt, then apply SHA-256 hashing. This produces a fixed-size 256-bit hash value that cannot be reversed.
+                    </p>
+                    <div class="step-code">
+                        const combined = template + salt;<br>
+                        const hash = await crypto.subtle.digest('SHA-256', combined);<br>
+                        // Hash: 64 hexadecimal characters
+                    </div>
+                </div>
+
+                <div class="step" data-step="5">
+                    <h3 class="step-title">Store Securely</h3>
+                    <p class="step-description">
+                        Save the hash and salt in the database. The original biometric template is discarded and never stored. Link the hash to the user's identity.
+                    </p>
+                    <div class="step-code">
+                        database.store({<br>
+                        &nbsp;&nbsp;userId: "user123",<br>
+                        &nbsp;&nbsp;hash: "8d969eef6ecad3c29a3a629280e686cf...",<br>
+                        &nbsp;&nbsp;salt: "a3f8c2e9b1d4567890...",<br>
+                        &nbsp;&nbsp;algorithm: "SHA-256"<br>
+                        });
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verification Phase -->
+        <div class="procedure-phase">
+            <div class="phase-header">
+                <div class="phase-icon">✓</div>
+                <h2 class="phase-title">Verification Phase</h2>
+            </div>
+
+            <p style="font-size: 1.1rem; color: var(--color-text-muted); margin-bottom: 2rem;">
+                The verification phase authenticates a user by comparing a newly captured biometric against the stored hash.
+            </p>
+
+            <div class="steps-container">
+                <div class="step" data-step="1">
+                    <h3 class="step-title">Capture New Sample</h3>
+                    <p class="step-description">
+                        User presents their biometric trait for verification. The system captures a fresh sample in the same manner as enrollment.
+                    </p>
+                    <div class="step-code">
+                        const newSample = await captureBiometric();<br>
+                        // Fresh biometric data from user
+                    </div>
+                </div>
+
+                <div class="step" data-step="2">
+                    <h3 class="step-title">Extract Features</h3>
+                    <p class="step-description">
+                        Extract features from the new sample using the same algorithm as enrollment. This creates a new template for comparison.
+                    </p>
+                    <div class="step-code">
+                        const newTemplate = extractBiometricFeatures(newSample);
+                    </div>
+                </div>
+
+                <div class="step" data-step="3">
+                    <h3 class="step-title">Retrieve Stored Data</h3>
+                    <p class="step-description">
+                        Query the database to retrieve the stored hash and salt for the user attempting authentication.
+                    </p>
+                    <div class="step-code">
+                        const stored = await database.retrieve(userId);<br>
+                        const storedHash = stored.hash;<br>
+                        const storedSalt = stored.salt;
+                    </div>
+                </div>
+
+                <div class="step" data-step="4">
+                    <h3 class="step-title">Compute Verification Hash</h3>
+                    <p class="step-description">
+                        Combine the new template with the stored salt and compute SHA-256 hash. Use the SAME salt that was used during enrollment.
+                    </p>
+                    <div class="step-code">
+                        const combined = newTemplate + storedSalt;<br>
+                        const verificationHash = await crypto.subtle.digest('SHA-256', combined);
+                    </div>
+                </div>
+
+                <div class="step" data-step="5">
+                    <h3 class="step-title">Compare Hashes</h3>
+                    <p class="step-description">
+                        Perform constant-time comparison between the verification hash and stored hash. If they match exactly, authentication succeeds.
+                    </p>
+                    <div class="step-code">
+                        if (constantTimeCompare(verificationHash, storedHash)) {<br>
+                        &nbsp;&nbsp;// Authentication SUCCESS<br>
+                        &nbsp;&nbsp;grantAccess();<br>
+                        } else {<br>
+                        &nbsp;&nbsp;// Authentication FAILURE<br>
+                        &nbsp;&nbsp;denyAccess();<br>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison -->
+        <div style="margin: 4rem 0;">
+            <h2 style="font-size: 2rem; color: var(--color-primary); text-align: center; margin-bottom: 2rem;">
+                Enrollment vs Verification
+            </h2>
+
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h3>📝 Enrollment</h3>
+                    <ul style="line-height: 2; color: var(--color-text-muted);">
+                        <li>✓ One-time process</li>
+                        <li>✓ Generates NEW salt</li>
+                        <li>✓ Creates and stores hash</li>
+                        <li>✓ Discards original biometric</li>
+                        <li>✓ Links to user identity</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-card">
+                    <h3>✓ Verification</h3>
+                    <ul style="line-height: 2; color: var(--color-text-muted);">
+                        <li>✓ Repeated for each login</li>
+                        <li>✓ Uses STORED salt</li>
+                        <li>✓ Computes verification hash</li>
+                        <li>✓ Compares against stored hash</li>
+                        <li>✓ Grants or denies access</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: space-between; margin-top: 4rem;">
+            <a href="theory.html" class="btn btn--secondary">
+                ← Previous: Theory
+            </a>
+            <a href="advantages.html" class="btn btn--primary">
+                Next: Advantages →
+            </a>
+        </div>
+    </div>
+</body>
+</html>

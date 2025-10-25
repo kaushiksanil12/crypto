@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Biometric Authentication - Advanced 3D Experience</title>
+    <style>
+        :root {
+            --color-bg-dark: #0a0a0a;
+            --color-bg-surface: #131313;
+            --color-text-light: #ffffff;
+            --color-text-muted: rgba(255, 255, 255, 0.6);
+            --color-primary: #00ff88;
+            --color-secondary: #00ccff;
+            --color-accent: #ff6b35;
+            --color-purple: #a855f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--color-bg-dark);
+            color: var(--color-text-light);
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        canvas {
+            display: block;
+            cursor: grab;
+        }
+
+        canvas:active {
+            cursor: grabbing;
+        }
+
+        #scroll-content {
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .content-box {
+            max-width: 700px;
+            text-align: center;
+            pointer-events: auto;
+            background: rgba(13, 13, 13, 0.85);
+            padding: 3rem;
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .content-box.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        h2 {
+            font-size: clamp(1.8rem, 4.5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            color: var(--color-primary);
+            letter-spacing: -0.01em;
+        }
+
+        p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            line-height: 1.7;
+            color: var(--color-text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            margin-top: 1rem;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: var(--color-bg-dark);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            color: var(--color-primary);
+            font-size: 0.9rem;
+            animation: bounce 2s infinite;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-purple));
+            z-index: 100;
+            transform-origin: left;
+            transform: scaleX(0);
+            box-shadow: 0 0 20px var(--color-primary);
+        }
+
+        .scene-info {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 10;
+            text-align: right;
+            pointer-events: none;
+        }
+
+        .scene-label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .scene-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .scene-title {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+        }
+
+        .interaction-hint {
+            position: fixed;
+            bottom: 6rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .content-box {
+                padding: 2rem;
+            }
+            
+            .scene-info {
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .scene-number {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--color-bg-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--color-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 1.5rem;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+        <div class="loading-text">Initializing 3D Environment...</div>
+    </div>
+
+    <div id="canvas-container"></div>
+    <div class="progress-bar"></div>
+    
+    <div class="scene-info">
+        <div class="scene-label">Scene</div>
+        <div class="scene-number" id="sceneNumber">01</div>
+        <div class="scene-title" id="sceneTitle">Introduction</div>
+    </div>
+    
+    <div id="scroll-content">
+        <div class="section" data-scene="0">
+            <div class="content-box">
+                <h1>Biometric Cryptography</h1>
+                <p>Experience the future of authentication through advanced 3D visualization. Explore how biometric data combines with cryptographic hashing to create secure, unbreakable identity verification.</p>
+                <a href="#aim" class="cta-button">Begin Journey</a>
+            </div>
+        </div>
+
+        <div class="section" data-scene="1">
+            <div class="content-box">
+                <h2>🎯 Project Aim</h2>
+                <p>To demonstrate the integration of biometric authentication (fingerprint and facial recognition) with cryptographic hashing techniques, showcasing secure enrollment and verification processes.</p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔐</div>
+                        <div class="feature-title">Secure Hashing</div>
+                        <div class="feature-desc">SHA-256 cryptographic hashing with salt</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👆</div>
+                        <div class="feature-title">Fingerprint Auth</div>
+                        <div class="feature-desc">WebAuthn API integration</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👤</div>
+                        <div class="feature-title">Face Recognition</div>
+                        <div class="feature-desc">Camera-based verification</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" data-scene="2">
+            <div class="content-box">
+                <h2>📚 Theory</h2>
+                <p><strong>Biometric authentication</strong> uses unique physical characteristics for identity verification. Combined with <strong>cryptographic hashing</strong>, biometric data is transformed into secure, irreversible hash values.</p>
+                <p>Key concepts: SHA-256 hashing, salt generation, one-way functions, hash collision resistance, and secure storage principles.</p>
+            </div>
+        </div>
+
+        <div class="section" data-scene="3">
+            <div class="content-box">
+                <h2>⚙️ Procedure</h2>
+                <p><strong>Enrollment Phase:</strong></p>
+                <p>1. Capture biometric data (fingerprint/face)<br>
+                2. Generate random salt<br>
+                3. Compute SHA-256 hash(biometric + salt)<br>
+                4. Store hash and salt securely</p>
+                <p><strong>Verification Phase:</strong></p>
+                <p>1. Capture new biometric sample<br>
+                2. Retrieve stored salt<br>
+                3. Compute hash with same salt<br>
+                4. Compare with stored hash</p>
+            </div>
+        </div>
+
+        <div class="section" data-scene="4">
+            <div class="content-box">
+                <h2>✨ Advantages</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <div class="feature-title">Enhanced Security</div>
+                        <div class="feature-desc">No storage of raw biometric data</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <div class="feature-title">Irreversibility</div>
+                        <div class="feature-desc">Hash functions are one-way</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <div class="feature-title">Fast Verification</div>
+                        <div class="feature-desc">Quick hash comparison</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-title">Unique Identity</div>
+                        <div class="feature-desc">Biometrics are unique to each person</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" data-scene="5">
+            <div class="content-box">
+                <h2>🧪 Live Simulation</h2>
+                <p>Ready to see it in action? Experience real-time enrollment and verification with hash visualization.</p>
+                <a href="simulations/enrollment.html" class="cta-button">Try Enrollment</a>
+                <a href="simulations/verification.html" class="cta-button" style="background: linear-gradient(135deg, var(--color-secondary), var(--color-purple));">Try Verification</a>
+            </div>
+        </div>
+
+        <div class="section" data-scene="6">
+            <div class="content-box">
+                <h1>The Future is Secure</h1>
+                <p>Biometric cryptography represents the next generation of authentication - combining the uniqueness of human biology with the mathematical certainty of cryptographic security.</p>
+                <a href="#top" class="cta-button">Back to Top</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="scroll-indicator" id="scrollIndicator">
+        <span>↓ Scroll to Explore ↓</span>
+    </div>
+
+    <div class="interaction-hint" id="interactionHint">
+        Click and drag to rotate • Mouse to explore
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Scene titles
+        const sceneTitles = [
+            'Introduction',
+            'Project Aim',
+            'Theory',
+            'Procedure',
+            'Advantages',
+            'Simulation',
+            'Conclusion'
+        ];
+
+        // Scene setup
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x0a0a0a, 5, 15);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 8;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
+
+        const pointLight1 = new THREE.PointLight(0x00ff88, 2.5, 100);
+        pointLight1.position.set(5, 5, 5);
+        scene.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight(0x00ccff, 2.5, 100);
+        pointLight2.position.set(-5, -5, 5);
+        scene.add(pointLight2);
+
+        const pointLight3 = new THREE.PointLight(0xa855f7, 2, 100);
+        pointLight3.position.set(0, 5, -5);
+        scene.add(pointLight3);
+
+        // Particle System
+        const particleCount = 5000;
+        const particleGeometry = new THREE.BufferGeometry();
+        const particlePositions = new Float32Array(particleCount * 3);
+        const particleColors = new Float32Array(particleCount * 3);
+
+        for (let i = 0; i < particleCount * 3; i += 3) {
+            particlePositions[i] = (Math.random() - 0.5) * 50;
+            particlePositions[i + 1] = (Math.random() - 0.5) * 50;
+            particlePositions[i + 2] = (Math.random() - 0.5) * 50;
+
+            const color = new THREE.Color();
+            color.setHSL(Math.random(), 1, 0.5);
+            particleColors[i] = color.r;
+            particleColors[i + 1] = color.g;
+            particleColors[i + 2] = color.b;
+        }
+
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
+        const particleMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particleSystem);
+
+        // DNA Helix
+        function createDNAHelix() {
+            const group = new THREE.Group();
+            const helixPoints = 100;
+            const radius = 1.5;
+            const height = 8;
+
+            for (let i = 0; i < helixPoints; i++) {
+                const angle = (i / helixPoints) * Math.PI * 4;
+                const y = (i / helixPoints) * height - height / 2;
+
+                // Strand 1
+                const sphere1Geometry = new THREE.SphereGeometry(0.15, 16, 16);
+                const sphere1Material = new THREE.MeshStandardMaterial({
+                    color: 0x00ff88,
+                    emissive: 0x00ff88,
+                    emissiveIntensity: 0.3,
+                    metalness: 0.8,
+                    roughness: 0.2
+                });
+                const sphere1 = new THREE.Mesh(sphere1Geometry, sphere1Material);
+                sphere1.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
+                group.add(sphere1);
+
+                // Strand 2
+                const sphere2Geometry = new THREE.SphereGeometry(0.15, 16, 16);
+                const sphere2Material = new THREE.MeshStandardMaterial({
+                    color: 0x00ccff,
+                    emissive: 0x00ccff,
+                    emissiveIntensity: 0.3,
+                    metalness: 0.8,
+                    roughness: 0.2
+                });
+                const sphere2 = new THREE.Mesh(sphere2Geometry, sphere2Material);
+                sphere2.position.set(Math.cos(angle + Math.PI) * radius, y, Math.sin(angle + Math.PI) * radius);
+                group.add(sphere2);
+
+                // Connecting bars every 5 points
+                if (i % 5 === 0) {
+                    const barGeometry = new THREE.CylinderGeometry(0.05, 0.05, radius * 2, 8);
+                    const barMaterial = new THREE.MeshStandardMaterial({
+                        color: 0xff6b35,
+                        metalness: 0.6,
+                        roughness: 0.3
+                    });
+                    const bar = new THREE.Mesh(barGeometry, barMaterial);
+                    bar.position.y = y;
+                    bar.rotation.z = angle + Math.PI / 2;
+                    group.add(bar);
+                }
+            }
+
+            return group;
+        }
+
+        // Morphing Geometry
+        function createMorphingSphere() {
+            const geometry = new THREE.IcosahedronGeometry(2, 4);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x00ff88,
+                wireframe: false,
+                metalness: 0.9,
+                roughness: 0.1,
+                emissive: 0x00ff88,
+                emissiveIntensity: 0.2
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            
+            // Store original positions for morphing
+            mesh.geometry.userData.originalPositions = mesh.geometry.attributes.position.array.slice();
+            
+            return mesh;
+        }
+
+        // Instanced Cubes
+        function createInstancedCubes() {
+            const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+            const count = 1000;
+            const instancedMesh = new THREE.InstancedMesh(
+                geometry,
+                new THREE.MeshStandardMaterial({
+                    color: 0x00ccff,
+                    metalness: 0.7,
+                    roughness: 0.3
+                }),
+                count
+            );
+
+            const dummy = new THREE.Object3D();
+            const color = new THREE.Color();
+
+            for (let i = 0; i < count; i++) {
+                dummy.position.set(
+                    (Math.random() - 0.5) * 20,
+                    (Math.random() - 0.5) * 20,
+                    (Math.random() - 0.5) * 20
+                );
+                dummy.rotation.set(
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI
+                );
+                dummy.scale.setScalar(Math.random() * 0.5 + 0.5);
+                dummy.updateMatrix();
+                instancedMesh.setMatrixAt(i, dummy.matrix);
+
+                color.setHSL(i / count, 1, 0.5);
+                instancedMesh.setColorAt(i, color);
+            }
+
+            return instancedMesh;
+        }
+
+        // Torus Knot with custom material
+        function createTorusKnot() {
+            const geometry = new THREE.TorusKnotGeometry(1.5, 0.4, 128, 32);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0xa855f7,
+                metalness: 0.9,
+                roughness: 0.1,
+                emissive: 0xa855f7,
+                emissiveIntensity: 0.2
+            });
+            return new THREE.Mesh(geometry, material);
+        }
+
+        // Create all scene objects
+        const objects = [];
+        objects.push(createTorusKnot());          // Scene 0
+        objects.push(createDNAHelix());           // Scene 1
+        objects.push(createMorphingSphere());     // Scene 2
+        objects.push(createInstancedCubes());     // Scene 3
+        objects.push(createDNAHelix());           // Scene 4 (reuse DNA)
+        objects.push(createMorphingSphere());     // Scene 5 (reuse sphere)
+        objects.push(createTorusKnot());          // Scene 6 (reuse torus)
+
+        objects.forEach((obj, index) => {
+            obj.visible = index === 0;
+            scene.add(obj);
+        });
+
+        // Mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetRotationX = 0;
+        let targetRotationY = 0;
+        let isDragging = false;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            if (isDragging) {
+                targetRotationY = mouseX * Math.PI;
+                targetRotationX = mouseY * Math.PI;
+            }
+        });
+
+        renderer.domElement.addEventListener('mousedown', () => {
+            isDragging = true;
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        // Scroll handling
+        let scrollProgress = 0;
+        let currentScene = 0;
+        const totalScenes = 7;
+
+        function handleScroll() {
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            scrollProgress = window.scrollY / maxScroll;
+            
+            document.querySelector('.progress-bar').style.transform = `scaleX(${scrollProgress})`;
+            
+            const sceneProgress = scrollProgress * (totalScenes - 1);
+            const newScene = Math.floor(sceneProgress);
+            const sceneTransition = sceneProgress - newScene;
+            
+            if (newScene !== currentScene) {
+                currentScene = newScene;
+                document.getElementById('sceneNumber').textContent = String(currentScene + 1).padStart(2, '0');
+                document.getElementById('sceneTitle').textContent = sceneTitles[currentScene];
+            }
+            
+            // Object visibility and transitions
+            objects.forEach((obj, index) => {
+                if (index === newScene) {
+                    obj.visible = true;
+                    if (obj.material) {
+                        obj.material.opacity = 1;
+                        obj.material.transparent = false;
+                    }
+                } else if (index === newScene + 1 && sceneTransition > 0.7) {
+                    obj.visible = true;
+                    if (obj.material) {
+                        obj.material.transparent = true;
+                        obj.material.opacity = (sceneTransition - 0.7) / 0.3;
+                    }
+                } else {
+                    obj.visible = false;
+                }
+            });
+            
+            // Animate current object
+            if (objects[newScene]) {
+                const obj = objects[newScene];
+                
+                if (!isDragging) {
+                    obj.rotation.y = sceneTransition * Math.PI * 2;
+                }
+                
+                const scale = 1 + Math.sin(sceneTransition * Math.PI) * 0.15;
+                obj.scale.set(scale, scale, scale);
+            }
+            
+            // Camera movement
+            camera.position.z = 8 - scrollProgress * 3;
+            camera.position.y = Math.sin(scrollProgress * Math.PI * 2) * 1.5;
+            
+            // Light movement
+            const time = Date.now() * 0.001;
+            pointLight1.position.x = Math.sin(time + scrollProgress * Math.PI * 2) * 5;
+            pointLight1.position.z = Math.cos(time + scrollProgress * Math.PI * 2) * 5;
+            pointLight2.position.x = -Math.sin(time + scrollProgress * Math.PI * 2) * 5;
+            pointLight2.position.z = -Math.cos(time + scrollProgress * Math.PI * 2) * 5;
+            
+            // UI elements
+            document.getElementById('scrollIndicator').style.opacity = scrollProgress < 0.05 ? 1 : 0;
+            document.getElementById('interactionHint').style.opacity = scrollProgress > 0.05 && scrollProgress < 0.95 ? 1 : 0;
+        }
+
+        // Intersection Observer
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelector('.content-box').classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll();
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const time = Date.now() * 0.001;
+            
+            // Particle animation
+            const positions = particleSystem.geometry.attributes.position.array;
+            for (let i = 0; i < positions.length; i += 3) {
+                positions[i + 1] += Math.sin(time + positions[i]) * 0.01;
+            }
+            particleSystem.geometry.attributes.position.needsUpdate = true;
+            particleSystem.rotation.y += 0.0002;
+            
+            // Animate visible objects
+            objects.forEach((obj, index) => {
+                if (obj.visible) {
+                    if (index === 1 || index === 4) { // DNA Helix
+                        obj.rotation.y += 0.005;
+                    } else if (index === 2 || index === 5) { // Morphing Sphere
+                        const positions = obj.geometry.attributes.position.array;
+                        const original = obj.geometry.userData.originalPositions;
+                        
+                        for (let i = 0; i < positions.length; i += 3) {
+                            const offset = Math.sin(time + i * 0.1) * 0.2;
+                            positions[i] = original[i] + offset;
+                            positions[i + 1] = original[i + 1] + offset;
+                            positions[i + 2] = original[i + 2] + offset;
+                        }
+                        obj.geometry.attributes.position.needsUpdate = true;
+                    } else if (index === 3) { // Instanced Cubes
+                        const dummy = new THREE.Object3D();
+                        for (let i = 0; i < obj.count; i++) {
+                            obj.getMatrixAt(i, dummy.matrix);
+                            dummy.matrix.decompose(dummy.position, dummy.quaternion, dummy.scale);
+                            dummy.rotation.x += 0.01;
+                            dummy.rotation.y += 0.01;
+                            dummy.updateMatrix();
+                            obj.setMatrixAt(i, dummy.matrix);
+                        }
+                        obj.instanceMatrix.needsUpdate = true;
+                    }
+                    
+                    // Apply drag rotation
+                    if (isDragging) {
+                        obj.rotation.x += (targetRotationX - obj.rotation.x) * 0.05;
+                        obj.rotation.y += (targetRotationY - obj.rotation.y) * 0.05;
+                    }
+                }
+            });
+            
+            // Parallax camera movement
+            if (!isDragging) {
+                camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.02;
+                camera.position.y += (-mouseY * 0.5 - camera.position.y) * 0.02;
+            }
+            camera.lookAt(scene.position);
+            
+            renderer.render(scene, camera);
+        }
+
+        // Window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Hide loading screen
+        setTimeout(() => {
+            document.getElementById('loadingScreen').classList.add('hidden');
+            animate();
+        }, 1000);
+    </script>
+</body>
+</html>

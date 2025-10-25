@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Aim - Crypto Biometric Authentication</title>
+    <link rel="stylesheet" href="../assets/css/design-system.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <style>
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .page-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .objective-card {
+            background: var(--color-bg-surface);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .objective-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .objective-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .objective-title {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .objective-description {
+            color: var(--color-text-muted);
+            line-height: 1.7;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        .key-features {
+            margin-top: 4rem;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 2rem;
+        }
+
+        .features-list li {
+            background: var(--color-bg-surface);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--color-primary);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .features-list li::before {
+            content: "✓";
+            color: var(--color-primary);
+            font-weight: bold;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+
+        <div class="page-header">
+            <h1 class="page-title">🎯 Project Aim</h1>
+            <p class="page-subtitle">
+                Demonstrating the integration of biometric authentication with cryptographic security
+            </p>
+        </div>
+
+        <div class="objectives-grid">
+            <div class="objective-card">
+                <div class="objective-number">01</div>
+                <h3 class="objective-title">Secure Authentication</h3>
+                <p class="objective-description">
+                    Implement robust biometric authentication using fingerprint and facial recognition technologies integrated with cryptographic hashing for enhanced security.
+                </p>
+            </div>
+
+            <div class="objective-card">
+                <div class="objective-number">02</div>
+                <h3 class="objective-title">Cryptographic Hashing</h3>
+                <p class="objective-description">
+                    Demonstrate SHA-256 hashing with salt to transform biometric data into secure, irreversible hash values that protect user privacy.
+                </p>
+            </div>
+
+            <div class="objective-card">
+                <div class="objective-number">03</div>
+                <h3 class="objective-title">Interactive Simulation</h3>
+                <p class="objective-description">
+                    Provide hands-on enrollment and verification simulations with real-time visualization of hashing processes and security mechanisms.
+                </p>
+            </div>
+
+            <div class="objective-card">
+                <div class="objective-number">04</div>
+                <h3 class="objective-title">Educational Value</h3>
+                <p class="objective-description">
+                    Educate users on the principles of biometric cryptography, demonstrating best practices in secure identity management.
+                </p>
+            </div>
+
+            <div class="objective-card">
+                <div class="objective-number">05</div>
+                <h3 class="objective-title">Real-World Application</h3>
+                <p class="objective-description">
+                    Showcase practical implementation using WebAuthn API and modern web technologies for cross-platform compatibility.
+                </p>
+            </div>
+
+            <div class="objective-card">
+                <div class="objective-number">06</div>
+                <h3 class="objective-title">Security Analysis</h3>
+                <p class="objective-description">
+                    Analyze and demonstrate security advantages including attack resistance, privacy protection, and secure storage principles.
+                </p>
+            </div>
+        </div>
+
+        <div class="key-features">
+            <h2 style="font-size: 2rem; color: var(--color-primary); margin-bottom: 1rem;">Key Features</h2>
+            <ul class="features-list">
+                <li>
+                    <div>
+                        <strong>Dual Biometric Support:</strong> Integration of both fingerprint (WebAuthn) and facial recognition (camera-based) authentication methods.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>SHA-256 Hashing:</strong> Industry-standard cryptographic hash function ensuring data integrity and security.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Salt Generation:</strong> Cryptographically secure random salt generation to prevent rainbow table attacks.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Real-time Visualization:</strong> Live hash generation display showing the transformation process step-by-step.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Secure Storage Simulation:</strong> Demonstration of best practices for storing biometric hash data.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <strong>Cross-Platform Compatibility:</strong> Web-based solution working across devices with biometric capabilities.
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 4rem;">
+            <a href="theory.html" class="btn btn--primary btn--lg">
+                Next: Theory →
+            </a>
+        </div>
+    </div>
+</body>
+</html>
