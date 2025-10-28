@@ -717,7 +717,7 @@ function createOrbitingSpheres() {
 // Morph between a cube and sphere
 function createMorphingCubeSphere() {
   // Create a geometry with extra vertices for smooth morphing
-  const geometry = new THREE.IcosahedronGeometry(2, 4);
+  const geometry = new THREE.IcosahedronGeometry(4, 4);
   // Original cube positions
   const cubePositions = geometry.attributes.position.array.slice();
   // Animate to sphere
@@ -725,10 +725,10 @@ function createMorphingCubeSphere() {
 
   // You can morph using position offsets in animation
   const material = new THREE.MeshStandardMaterial({
-    color: 0x00ff88,
-    metalness: 0.9,
-    roughness: 0.08,
-    wireframe: false
+    color: 0xff8800,
+    metalness: 0.1,
+    roughness: 0.3,
+    wireframe: true
   });
   const mesh = new THREE.Mesh(geometry, material);
   mesh.userData.morphProgress = 0;
@@ -740,7 +740,7 @@ function createMorphingCubeSphere() {
     for (let i = 0; i < pos.length; i++) {
       // Morph between cube and sphere
       const theta = mesh.userData.morphProgress;
-      pos[i] = orig[i] + Math.sin(t + i * 0.1) * 0.15 * theta; // wobble
+      pos[i] = orig[i] + Math.sin(t + i * 0.1) * 100.915 * theta; // wobble
     }
     geometry.attributes.position.needsUpdate = true;
   };
@@ -856,7 +856,7 @@ function createRootNetwork() {
         let lastPos = new THREE.Vector3(0, 0, 0);
         for (let j = 0; j < subBranches; j++) {
             const length = 1 + Math.random() * 0.9;
-            const branchGeom = new THREE.CylinderGeometry(0.06, 0.09, length, 10);
+            const branchGeom = new THREE.CylinderGeometry(0.06, 0.09, length, 15);
             const branchMat = new THREE.MeshStandardMaterial({
                 color: 0x00ccff,
                 metalness: 0.92,
@@ -877,7 +877,7 @@ function createRootNetwork() {
 }
 
 function createInstancedBioGrid() {
-    const gridX = 24, gridY = 16;
+    const gridX = 35, gridY = 26;
     const count = gridX * gridY;
     const geometry = new THREE.BoxGeometry(0.20, 0.20, 0.20);
     const instancedMesh = new THREE.InstancedMesh(
@@ -937,11 +937,12 @@ function createInstancedBioGrid() {
         // Create all scene objects
         const objects = [];
         objects.push(createInstancedCubes());
-        objects.push(createTorusKnot());
+        objects.push(createRootNetwork());
+        // objects.push(createTorusKnot());
         objects.push(createMorphingCubeSphere());
-        objects.push(createInstancedStarburst());   
-        objects.push(createRootNetwork());     
-        objects.push(createInstancedBioGrid());     
+        objects.push(createInstancedStarburst());        
+        objects.push(createInstancedBioGrid()); 
+        // objects.push(createProceduralTree());   
 
         objects.forEach((obj, index) => {
             obj.visible = index === 0;
